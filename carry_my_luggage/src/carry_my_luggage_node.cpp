@@ -10,6 +10,7 @@
 
 #include "ros/package.h"
 
+#include "carry_my_luggage/DetectBag.h"
 #include "carry_my_luggage/DetectObject.h"
 #include "carry_my_luggage/FollowPerson.h"
 #include "carry_my_luggage/GotoArena.h"
@@ -28,7 +29,8 @@ int main(int argc, char **argv)
   factory.registerNodeType<visual_behavior::DetectBall>("GotoArena");
   factory.registerNodeType<visual_behavior::DetectBall>("FollowPerson");
   factory.registerNodeType<visual_behavior::Foward>("DetectObject");
-  
+  factory.registerNodeType<visual_behavior::Turn>("DetectBag");
+
   auto blackboard = BT::Blackboard::create();
 
   std::string pkgpath = ros::package::getPath("carry_my_luggage");

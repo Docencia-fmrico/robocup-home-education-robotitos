@@ -55,6 +55,7 @@ link_directories(
 )
 
 add_library(${PROJECT_NAME}
+src/carry_my_luggage/DetectBag.cpp
   src/carry_my_luggage/DetectObject.cpp
   src/carry_my_luggage/GotoArena.cpp
   src/carry_my_luggage/GotoDoor.cpp
@@ -81,6 +82,7 @@ set(ROSLINT_CPP_OPTS "--filter=-runtime/printf")
 
 roslint_cpp(
   src/carry_my_luggage_node.cpp
+  src/carry_my_luggage/DetectBag.cpp
   include/carry_my_luggage/DetectBag.h
   src/carry_my_luggage/DetectObject.cpp
   include/carry_my_luggage/DetectObject.h
