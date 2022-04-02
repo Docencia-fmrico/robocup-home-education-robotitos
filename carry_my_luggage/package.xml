@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>robocup_navigation</name>
+  <name>carry_my_luggage</name>
   <version>0.1.0</version>
-  <description>The robocup_navigation package</description>
+  <description>The carry_my_luggage package</description>
 
   <maintainer email="fmrico@gmail.com">fmrico</maintainer>
   
