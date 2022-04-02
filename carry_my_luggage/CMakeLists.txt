@@ -18,9 +18,6 @@ find_package(catkin REQUIRED COMPONENTS
   message_filters
 )
 
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-
 catkin_package(
 LIBRARIES geometry_tf
 CATKIN_DEPENDS 
@@ -38,16 +35,14 @@ CATKIN_DEPENDS
   message_filters
 )
 
-find_package(OpenCV)
+find_package(OpenCV REQUIRED)
 find_package(OpenCV 4 REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 include_directories(
-  ${catkin_INCLUDE_DIRS}
   include
+  ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
-  ${PROJECT_NAME}/include
-  ${PROJECT_NAME}/src
 )
 
 link_directories(
@@ -55,7 +50,7 @@ link_directories(
 )
 
 add_library(${PROJECT_NAME}
-src/carry_my_luggage/DetectBag.cpp
+  src/carry_my_luggage/DetectBag.cpp
   src/carry_my_luggage/DetectObject.cpp
   src/carry_my_luggage/GotoArena.cpp
   src/carry_my_luggage/GotoDoor.cpp
