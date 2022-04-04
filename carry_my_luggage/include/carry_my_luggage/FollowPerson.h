@@ -22,20 +22,15 @@
 namespace carry_my_luggage
 {
 
-class FollowPerson : public BT::ConditionNode
+class FollowPerson : public BT::ActionNodeBase
 {
   public:
-    explicit FollowPerson(const std::string& name, const BT::NodeConfiguration& config);
-
+    explicit FollowPerson(const std::string& name);
+    void halt();
     BT::NodeStatus tick();
     void callback_bbx(const sensor_msgs::ImageConstPtr& image, const darknet_ros_msgs::BoundingBoxesConstPtr& boxes);
     void CounterCallBack(const darknet_ros_msgs::ObjectCount::ConstPtr& counter);
     void laserCallBack(const sensor_msgs::LaserScan::ConstPtr& laser);
-   
-    static BT::PortsList providedPorts()
-    {
-        return 0;
-    }
     
   private:
     ros::NodeHandle n_;
@@ -53,9 +48,9 @@ class FollowPerson : public BT::ConditionNode
     float dist;
     int px_min, px_max;
     int py, px;
-    PID pid_foward;
-    PID pid_turn_right;
-    PID pid_turn_left ;
+    PID pid_foward = PID(1.4, 7, 0.0, 0.2); // PID solo para ir hacia delante
+    PID pid_turn_right = PID(440, 640, 0.0, 0.4); // PID para girar a la derecha
+    PID pid_turn_left = PID(0, 200, 0.0, 0.4); // PID para girar a la izquierda
 
 };
 

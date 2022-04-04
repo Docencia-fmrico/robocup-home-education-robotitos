@@ -16,11 +16,10 @@
 namespace carry_my_luggage
 {
 
-DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration & config)
-: BT::ActionNodeBase(name, config)
+DetectBag::DetectBag(const std::string& name)
+: BT::ActionNodeBase(name, {})
 {
   found_bag_ = false;
-  contador_ = 0;
   pixel_counter_ = 0;
   sub_hsv_ = n_.subscribe("/hsv/image_filtered",1,&DetectBag::DetectBagCallBack,this);
 }

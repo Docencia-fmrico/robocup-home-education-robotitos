@@ -10,6 +10,7 @@
 #include <darknet_ros_msgs/BoundingBoxes.h>
 #include <darknet_ros_msgs/ObjectCount.h>
 #include "sensor_msgs/LaserScan.h"
+#include "carry_my_luggage/PID.h"
 
 #include "ros/ros.h"
 #include <string>
@@ -17,13 +18,9 @@
 namespace carry_my_luggage
 {
 
-FollowPerson::FollowPerson(const std::string& name, const BT::NodeConfiguration & config)
-: BT::ConditionNode(name, config), sync_bbx(MySyncPolicy_bbx(10),image_depth_sub, bbx_sub), obstacle_detected_(false)
+FollowPerson::FollowPerson(const std::string& name)
+: BT::ActionNodeBase(name, {}), sync_bbx(MySyncPolicy_bbx(10),image_depth_sub, bbx_sub), obstacle_detected_(false)
 { found_person_ == false;
-  PID pid_foward = PID(1.4, 7, 0.0, 0.2); // PID solo para ir hacia delante
-  PID pid_turn_right = PID(440, 640, 0.0, 0.4); // PID para girar a la derecha
-  PID pid_turn_left = PID(0, 200, 0.0, 0.4); // PID para girar a la izquierda
-
   image_depth_sub.subscribe(n_, "/camera/depth/image_raw", 1);
   bbx_sub.subscribe(n_, "/darknet_ros/bounding_boxes", 1);
 
@@ -89,6 +86,12 @@ FollowPerson::CounterCallBack(const darknet_ros_msgs::ObjectCount::ConstPtr& cou
   }
 }
 
+void
+FollowPerson::halt()
+{
+  ROS_INFO("FollowPerson halt");
+}
+
 BT::NodeStatus
 FollowPerson::tick()
 {
@@ -97,9 +100,9 @@ FollowPerson::tick()
     ROS_INFO("Loking for a person and return a distance");
   }
 
-  double foward_velocity = pid_foward.get_output(dist);
-  double turn_right_velocity = pid_turn_right.get_output(px);
-  double turn_left_velocity = pid_turn_left.get_output(px);
+  double foward_velocity = 0.0; //pid_foward.get_output(dist);
+  double turn_right_velocity = 0.0; //pid_turn_right.get_output(px);
+  double turn_left_velocity = 0.0; //pid_turn_left.get_output(px);
 
   if (dist <= 1.0) {       //si esta muy cerca deja de detectar a la persona entonces si la ultima dist
     found_person_ == true; // es menor que 1.0 significa que lo tiene delante

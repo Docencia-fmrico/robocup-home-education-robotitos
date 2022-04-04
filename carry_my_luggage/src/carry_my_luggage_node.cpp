@@ -25,11 +25,8 @@ int main(int argc, char **argv)
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
 
-  factory.registerNodeType<visual_behavior::MakeSound>("GotoDoor");
-  factory.registerNodeType<visual_behavior::DetectBall>("GotoArena");
-  factory.registerNodeType<visual_behavior::DetectBall>("FollowPerson");
-  factory.registerNodeType<visual_behavior::Foward>("DetectObject");
-  factory.registerNodeType<visual_behavior::Turn>("DetectBag");
+  factory.registerNodeType<carry_my_luggage::FollowPerson>("FollowPerson");
+  factory.registerNodeType<carry_my_luggage::DetectBag>("DetectBag");
 
   auto blackboard = BT::Blackboard::create();
 
