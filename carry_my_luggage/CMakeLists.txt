@@ -55,6 +55,7 @@ add_library(${PROJECT_NAME}
   src/carry_my_luggage/GotoArena.cpp
   src/carry_my_luggage/GotoDoor.cpp
   src/carry_my_luggage/FollowPerson.cpp
+  src/carry_my_luggage/PID.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
@@ -87,4 +88,7 @@ roslint_cpp(
   include/carry_my_luggage/GotoDoor.h
   src/carry_my_luggage/FollowPerson.cpp
   include/carry_my_luggage/FollowPerson.h
+  src/carry_my_luggage/PID.cpp
+  include/carry_my_luggage/PID.h
+  include/carry_my_luggage/clamp.h
 )
