@@ -10,11 +10,12 @@
 
 #include "ros/package.h"
 
-#include "visual_behavior/MakeSound.h"
-#include "visual_behavior/DetectBall.h"
-#include "visual_behavior/DetectBallDist.h"
-#include "visual_behavior/Foward.h"
-#include "visual_behavior/Turn.h"
+#include "carry_my_luggage/DetectBag.h"
+#include "carry_my_luggage/DetectObject.h"
+#include "carry_my_luggage/FollowPerson.h"
+#include "carry_my_luggage/GotoArena.h"
+#include "carry_my_luggage/GotoDoor.h"
+
 
 int main(int argc, char **argv)
 {
@@ -24,16 +25,16 @@ int main(int argc, char **argv)
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
 
-  factory.registerNodeType<visual_behavior::MakeSound>("MakeSound");
-  factory.registerNodeType<visual_behavior::DetectBall>("DetectBall");
-  factory.registerNodeType<visual_behavior::DetectBall>("DetectBallDist");
-  factory.registerNodeType<visual_behavior::Foward>("Foward");
-  factory.registerNodeType<visual_behavior::Turn>("Turn");
+  factory.registerNodeType<visual_behavior::MakeSound>("GotoDoor");
+  factory.registerNodeType<visual_behavior::DetectBall>("GotoArena");
+  factory.registerNodeType<visual_behavior::DetectBall>("FollowPerson");
+  factory.registerNodeType<visual_behavior::Foward>("DetectObject");
+  factory.registerNodeType<visual_behavior::Turn>("DetectBag");
 
   auto blackboard = BT::Blackboard::create();
 
   std::string pkgpath = ros::package::getPath("carry_my_luggage");
-  std::string xml_file = pkgpath + "/visual_behavior_xml/carry_my_luggage.xml";
+  std::string xml_file = pkgpath + "/carry_my_luggage_xml/carry_my_luggage.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
