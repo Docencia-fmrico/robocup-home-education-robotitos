@@ -3,25 +3,12 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <Sequence>
-            <Action ID="GotoDoor"/>
-            <Action ID="DetectBag"/>
-            <ReactiveFallback>
-                <Action ID="DetectObject"/>
-                <Action ID="FollowPerson"/>
-            </ReactiveFallback>
-            <ReactiveFallback>
-                <Action ID="DetectObject"/>
-                <Action ID="GotoArena"/>
-            </ReactiveFallback>
+            <Action ID="FollowPerson"/>
         </Sequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
-        <Action ID="DetectBag"/>
-        <Action ID="DetectObject"/>
         <Action ID="FollowPerson"/>
-        <Action ID="GotoArena"/>
-        <Action ID="GotoDoor"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>
