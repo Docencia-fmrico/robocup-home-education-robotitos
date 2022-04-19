@@ -12,7 +12,7 @@
 
 #include "carry_my_luggage/DetectBag.h"
 #include "carry_my_luggage/DetectObject.h"
-#include "carry_my_luggage/FollowPerson.h"
+#include "carry_my_luggage/DetectPerson.h"
 #include "carry_my_luggage/GotoArena.h"
 #include "carry_my_luggage/GotoDoor.h"
 #include "carry_my_luggage/GotoPerson.h"
@@ -28,7 +28,14 @@ int main(int argc, char **argv)
 
   factory.registerNodeType<carry_my_luggage::DetectPerson>("DetectPerson");
   factory.registerNodeType<carry_my_luggage::DetectBag>("DetectBag");
-  //factory.registerNodeType<carry_my_luggage::GotoArena>("GotoPerson");
+  BT::NodeBuilder builder =
+    [](const std::string & name, const BT::NodeConfiguration & config)
+    {
+      return std::make_unique<carry_my_luggage::GotoPerson>(name, "GotoPerson_base", config);
+    };
+
+  factory.registerBuilder<carry_my_luggage::GotoPerson>("GotoPerson", builder);
+  //factory.registerNodeType<carry_my_luggage::GotoPerson>("GotoPerson");
   //factory.registerNodeType<carry_my_luggage::DetectObject>("DetectObject");
   //factory.registerNodeType<carry_my_luggage::GotoArena>("GotoArena");
   //factory.registerNodeType<carry_my_luggage::GotoDoor>("GotoDoor");

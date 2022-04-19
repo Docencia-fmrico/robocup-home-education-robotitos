@@ -67,7 +67,6 @@ class DetectPerson : public BT::ActionNodeBase
     ros::Subscriber sub_laser_;
     ros::Subscriber pointCloudSub_;
     tf::TransformBroadcaster tfBroadcaster_;
-    tf::TransformListener tfListener_;
 
     std::string objectFrameId_;
     std::string workingFrameId_;

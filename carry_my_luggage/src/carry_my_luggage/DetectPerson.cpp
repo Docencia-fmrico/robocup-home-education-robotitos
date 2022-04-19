@@ -1,6 +1,7 @@
 #include "carry_my_luggage/DetectPerson.h"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
+#include "behaviortree_cpp_v3/bt_factory.h"
 #include <cv_bridge/cv_bridge.h>
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
@@ -101,7 +102,7 @@ DetectPerson::callback_bbx(const sensor_msgs::ImageConstPtr& image, const darkne
     if (box.Class == "person") {
       px = (box.xmax + box.xmin) / 2;
       py = (box.ymax + box.ymin) / 2;
-      found_person_ = true; //estaba aqui en falso y no se como funcionaba
+      found_person_ = true;
       dist = img_ptr_depth->image.at<float>(cv::Point(px, py)) * 0.001f;
     }
   }
@@ -123,38 +124,6 @@ DetectPerson::tick()
 
 
   return BT::NodeStatus::SUCCESS;
-  /*
-  if (dist <= 1.0) {       //si esta muy cerca deja de detectar a la persona entonces si la ultima dist
-    found_person_ == true; // es menor que 1.0 significa que lo tiene delante
-  }
-
-  if (found_person_ == true) {
-    std::cerr << "dist:" << dist << std::endl;
-
-    if (dist >= 1.4) {
-      setOutput("foward_velocity", std::to_string(foward_velocity));
-    } else if (dist <= 1.0) {
-      setOutput("foward_velocity", "-0.1" );
-    } else {
-      setOutput("foward_velocity", "0.0" );
-    }
-
-    //comprobamos si debemos girar un poco o no dependiendo de donde se encuentre la persona
-    if (px >= 440) {
-      setOutput("turn_velocity", std::to_string(-turn_right_velocity));
-    } else if (px <= 200) {
-      setOutput("turn_velocity", std::to_string(turn_left_velocity));
-    } else {
-      setOutput("turn_velocity", "0.0");
-    }
-    
-    return BT::NodeStatus::SUCCESS;
-  } else {
-    setOutput("foward_velocity", "0.0" );
-    setOutput("turn_velocity", "0.0" );
-    return BT::NodeStatus::FAILURE;
-  }
-  */
 }
 
 }  // namespace carry_my_luggage
