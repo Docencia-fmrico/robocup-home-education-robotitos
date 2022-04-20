@@ -9,7 +9,9 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   cv_bridge
-  tf
+  tf2_geometry_msgs
+  tf2
+  tf2_ros
   image_transport
   pcl_conversions
   pcl_ros
@@ -31,7 +33,9 @@ CATKIN_DEPENDS
   sensor_msgs 
   cv_bridge
   behaviortree_cpp_v3
-  tf
+  tf2_geometry_msgs
+  tf2
+  tf2_ros
   image_transport
   pcl_conversions
   pcl_ros
@@ -61,6 +65,7 @@ add_library(${PROJECT_NAME}
   src/carry_my_luggage/GotoDoor.cpp
   src/carry_my_luggage/DetectPerson.cpp
   src/carry_my_luggage/GotoPerson.cpp
+  src/carry_my_luggage/transforms.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
@@ -96,4 +101,6 @@ roslint_cpp(
   include/carry_my_luggage/BTNavAction.h
   src/carry_my_luggage/GotoPerson.cpp
   include/carry_my_luggage/GotoPerson.h
+  src/carry_my_luggage/transforms.cpp 
+  include/carry_my_luggage/transforms.h
 )

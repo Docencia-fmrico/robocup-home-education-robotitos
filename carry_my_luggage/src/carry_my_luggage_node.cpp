@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   BT::NodeBuilder builder =
     [](const std::string & name, const BT::NodeConfiguration & config)
     {
-      return std::make_unique<carry_my_luggage::GotoPerson>(name, "GotoPerson_base", config);
+      return std::make_unique<carry_my_luggage::GotoPerson>(name, "move_base", config);
     };
 
   factory.registerBuilder<carry_my_luggage::GotoPerson>("GotoPerson", builder);

@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARRY_MY_LUGGAGE_BTACTION_H
-#define CARRY_MY_LUGGAGE_BTACTION_H
+#ifndef CARRY_MY_LUGGAGE_BTNAVACTION_H
+#define CARRY_MY_LUGGAGE_BTNAVACTION_H
 
 #include <ros/ros.h>
 
@@ -133,4 +133,4 @@ private:
 
 }  // namespace carry_my_luggage
 
-#endif  // CARRY_MY_LUGGAGE_BTACTION_H
+#endif  // CARRY_MY_LUGGAGE_BTNAVACTION_H

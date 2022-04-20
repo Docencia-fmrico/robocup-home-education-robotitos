@@ -7,8 +7,14 @@
 #include "carry_my_luggage/BTNavAction.h"
 
 #include <tf/transform_broadcaster.h>
-#include <tf/transform_listener.h>
 #include <tf/message_filter.h>
+#include "tf2/transform_datatypes.h"
+#include "tf2_ros/transform_listener.h"
+#include "tf2/LinearMath/Transform.h"
+#include "geometry_msgs/TransformStamped.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2/convert.h"
+#include "tf2_ros/message_filter.h"
 
 #include "ros/ros.h"
 #include <string>
@@ -32,7 +38,12 @@ class GotoPerson : public BTNavAction
       return {};
     }
   private:
-    
+    tf2_ros::Buffer buffer;
+    tf2_ros::TransformListener listener;
+
+    geometry_msgs::TransformStamped bf2person_msg;
+    tf2::Stamped<tf2::Transform> bf2person;
+    std::string error;
 };
 
 }  // namespace carry_my_luggage
