@@ -33,13 +33,18 @@ class GotoPerson : public BTNavAction
     BT::NodeStatus on_tick() override;;
     void on_start() override;
     void on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) override;
+    void DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position);
 
     static BT::PortsList providedPorts() {
       return {};
     }
   private:
+    ros::NodeHandle n_;
+
     tf2_ros::Buffer buffer;
     tf2_ros::TransformListener listener;
+    ros::Subscriber direction_;
+    move_base_msgs::MoveBaseGoal directions;
 
     geometry_msgs::TransformStamped bf2person_msg;
     tf2::Stamped<tf2::Transform> bf2person;

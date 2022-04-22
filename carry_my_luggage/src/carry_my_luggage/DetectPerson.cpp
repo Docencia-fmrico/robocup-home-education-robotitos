@@ -59,26 +59,28 @@ void DetectPerson::cloudCB(const sensor_msgs::PointCloud2::ConstPtr& cloud_in)
   auto point = pcrgb->at(pixel);
   
   tf2::Stamped<tf2::Transform> transform;
-  if (!std::isnan(point.x) && !std::isnan(point.y))
-  {
-    transform.setOrigin(tf2::Vector3(point.x, point.y, 0));
-    transform.setRotation(tf2::Quaternion(0.0, 0.0, 0.0, 1.0));
-    std::cout << "point.x: " << point.x << " point.y: " << point.y << std::endl;
-    std::cout << "px: " << px << " py: " << py << std::endl;
-
-    transform.stamp_ = ros::Time::now();
-    transform.frame_id_ = workingFrameId_;
-    geometry_msgs::TransformStamped object_msg = tf2::toMsg(transform);
-    object_msg.child_frame_id = objectFrameId_;
-
-    try
+  if (found_person_==true) {
+    if (!std::isnan(point.x) && !std::isnan(point.y))
     {
-      tfBroadcaster_.sendTransform(object_msg);
-    }
-    catch(tf2::TransformException& ex)
-    {
-      ROS_ERROR_STREAM("Transform error of sensor data: " << ex.what() << ", quitting callback");
-      return;
+      transform.setOrigin(tf2::Vector3(point.x, point.y, 0));
+      transform.setRotation(tf2::Quaternion(0.0, 0.0, 0.0, 1.0));
+      std::cout << "point.x: " << point.x << " point.y: " << point.y << std::endl;
+      std::cout << "px: " << px << " py: " << py << std::endl;
+
+      transform.stamp_ = ros::Time::now();
+      transform.frame_id_ = workingFrameId_;
+      geometry_msgs::TransformStamped object_msg = tf2::toMsg(transform);
+      object_msg.child_frame_id = objectFrameId_;
+
+      try
+      {
+        tfBroadcaster_.sendTransform(object_msg);
+      }
+      catch(tf2::TransformException& ex)
+      {
+        ROS_ERROR_STREAM("Transform error of sensor data: " << ex.what() << ", quitting callback");
+        return;
+      }
     }
   }
 }
@@ -98,7 +100,6 @@ DetectPerson::callback_bbx(const sensor_msgs::ImageConstPtr& image, const darkne
   image_width = image->width;
   px_max = image->width;
   px_min = 0;
-  found_person_ = false;
 
   for (const auto & box : boxes->bounding_boxes) {
     if (box.Class == "person") {
@@ -118,7 +119,8 @@ DetectPerson::halt()
 
 BT::NodeStatus
 DetectPerson::tick()
-{
+{ 
+  found_person_ = false;
   return BT::NodeStatus::SUCCESS;
 }
 
