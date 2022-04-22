@@ -2,26 +2,15 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-        <Sequence>
-            <Action ID="GotoDoor"/>
-            <Action ID="DetectBag"/>
-            <ReactiveFallback>
-                <Action ID="DetectObject"/>
-                <Action ID="FollowPerson"/>
-            </ReactiveFallback>
-            <ReactiveFallback>
-                <Action ID="DetectObject"/>
-                <Action ID="GotoArena"/>
-            </ReactiveFallback>
-        </Sequence>
+        <ReactiveSequence>
+            <Action ID="DetectPerson"/>
+            <Action ID="GotoPerson"/>
+        </ReactiveSequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
-        <Action ID="DetectBag"/>
-        <Action ID="DetectObject"/>
-        <Action ID="FollowPerson"/>
-        <Action ID="GotoArena"/>
-        <Action ID="GotoDoor"/>
+        <Action ID="DetectPerson"/>
+        <Action ID="GotoPerson"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

@@ -19,11 +19,16 @@ namespace carry_my_luggage
 class DetectBag : public BT::ActionNodeBase
 {
   public:
-    explicit DetectBag(const std::string& name);
+    explicit DetectBag(const std::string& name, const BT::NodeConfiguration& config);
 
     BT::NodeStatus tick();
     void halt();
     void DetectBagCallBack(const sensor_msgs::Image::ConstPtr& image);
+
+    static BT::PortsList providedPorts()
+    {
+      return{};
+    }
 
   private:
     bool found_bag_;

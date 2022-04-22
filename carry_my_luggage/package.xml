@@ -21,13 +21,17 @@
   <build_depend>darknet_ros_msgs</build_depend>
   <build_depend>kobuki_msgs</build_depend>
   <build_depend>behaviortree_cpp_v3</build_depend>
-  <build_depend>tf</build_depend>
   <build_depend>pcl_ros</build_depend>
   <build_depend>image_transport</build_depend>
   <build_depend>pcl_conversions</build_depend>
   <build_depend>message_filters</build_depend>
   <build_depend>libzmq3-dev</build_depend>
   <build_depend>geometry_msgs</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <build_depend>move_base_msgs</build_depend>
+  <build_depend>tf2_geometry_msgs</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_ros</build_depend>
 
   <build_depend>roslint</build_depend>
 
@@ -39,13 +43,17 @@
   <build_export_depend>darknet_ros_msgs</build_export_depend>
   <build_export_depend>kobuki_msgs</build_export_depend>
   <build_export_depend>behaviortree_cpp_v3</build_export_depend>
-  <build_export_depend>tf</build_export_depend>
   <build_export_depend>pcl_ros</build_export_depend>
 	<build_export_depend>image_transport</build_export_depend>
   <build_export_depend>pcl_conversions</build_export_depend>
   <build_export_depend>message_filters</build_export_depend>
   <build_export_depend>libzmq3-dev</build_export_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>actionlib_msgs</build_export_depend>
+  <build_export_depend>move_base_msgs</build_export_depend>
+  <build_export_depend>tf2_geometry_msgs</build_export_depend>
+  <build_export_depend>tf2</build_export_depend>
+  <build_export_depend>tf2_ros</build_export_depend>
 
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>roscpp</exec_depend>
@@ -55,13 +63,17 @@
   <exec_depend>darknet_ros_msgs</exec_depend>
   <exec_depend>kobuki_msgs</exec_depend>
   <exec_depend>behaviortree_cpp_v3</exec_depend>
-  <exec_depend>tf</exec_depend>
   <exec_depend>pcl_ros</exec_depend>
 	<exec_depend>image_transport</exec_depend>
   <exec_depend>pcl_conversions</exec_depend>
   <exec_depend>message_filters</exec_depend>
   <exec_depend>libzmq3-dev</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
+  <exec_depend>move_base_msgs</exec_depend>
+  <exec_depend>tf2_geometry_msgs</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
 
   <export>
   </export>

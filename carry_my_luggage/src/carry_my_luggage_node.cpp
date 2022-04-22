@@ -12,9 +12,10 @@
 
 #include "carry_my_luggage/DetectBag.h"
 #include "carry_my_luggage/DetectObject.h"
-#include "carry_my_luggage/FollowPerson.h"
+#include "carry_my_luggage/DetectPerson.h"
 #include "carry_my_luggage/GotoArena.h"
 #include "carry_my_luggage/GotoDoor.h"
+#include "carry_my_luggage/GotoPerson.h"
 
 
 int main(int argc, char **argv)
@@ -25,8 +26,19 @@ int main(int argc, char **argv)
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
 
-  factory.registerNodeType<carry_my_luggage::FollowPerson>("FollowPerson");
+  factory.registerNodeType<carry_my_luggage::DetectPerson>("DetectPerson");
   factory.registerNodeType<carry_my_luggage::DetectBag>("DetectBag");
+  BT::NodeBuilder builder =
+    [](const std::string & name, const BT::NodeConfiguration & config)
+    {
+      return std::make_unique<carry_my_luggage::GotoPerson>(name, "move_base", config);
+    };
+
+  factory.registerBuilder<carry_my_luggage::GotoPerson>("GotoPerson", builder);
+  //factory.registerNodeType<carry_my_luggage::GotoPerson>("GotoPerson");
+  //factory.registerNodeType<carry_my_luggage::DetectObject>("DetectObject");
+  //factory.registerNodeType<carry_my_luggage::GotoArena>("GotoArena");
+  //factory.registerNodeType<carry_my_luggage::GotoDoor>("GotoDoor");
 
   auto blackboard = BT::Blackboard::create();
 
@@ -37,8 +49,6 @@ int main(int argc, char **argv)
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   ros::Rate loop_rate(10);
-
-  int count = 0;
 
   while (ros::ok())
   {
