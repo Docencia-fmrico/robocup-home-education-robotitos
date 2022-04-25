@@ -3,6 +3,7 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <Sequence>
+            <Action ID="GotoArena"/>
             <Repeat num_cycles="3">
                 <Sequence>
                     <Action ID="DetectPerson"/>
@@ -17,6 +18,7 @@
         <Action ID="DetectPerson"/>
         <Action ID="GetDescriptions"/>
         <Action ID="GotoArbitro"/>
+        <Action ID="GotoArena"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>
