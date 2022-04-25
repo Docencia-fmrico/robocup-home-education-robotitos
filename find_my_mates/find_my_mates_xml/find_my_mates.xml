@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <Sequence>
+            <Repeat num_cycles="3">
+                <Sequence>
+                    <Action ID="DetectPerson"/>
+                    <Action ID="GetDescriptions"/>
+                </Sequence>
+            </Repeat>
+            <Action ID="GotoArbitro"/>
+        </Sequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="DetectPerson"/>
+        <Action ID="GetDescriptions"/>
+        <Action ID="GotoArbitro"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>
+
