@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARRY_MY_LUGGAGE_TRANSFORMS_H
-#define CARRY_MY_LUGGAGE_TRANSFORMS_H
-
 #include "tf2/transform_datatypes.h"
 #include "tf2/LinearMath/Transform.h"
 
-namespace carry_my_luggage
+#include "find_my_mates/transforms.h"
+
+namespace find_my_mates
 {
 
-tf2::Vector3 transform_point(const tf2::Vector3 & input_point, const tf2::Transform & transform);
+tf2::Vector3 transform_point(const tf2::Vector3 & input_point, const tf2::Transform & transform)
+{
+  return  transform * input_point;
+}
 
-}  // namespace carry_my_luggage
-#endif  // CARRY_MY_LUGGAGE_TRANSFORMS_H
+}  // namespace find_my_mates

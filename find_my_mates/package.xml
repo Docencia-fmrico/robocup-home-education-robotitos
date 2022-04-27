@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>carry_my_luggage</name>
+  <name>find_my_mates</name>
   <version>0.1.0</version>
-  <description>The carry_my_luggage package</description>
+  <description>The find_my_mates package</description>
 
   <maintainer email="fmrico@gmail.com">fmrico</maintainer>
   

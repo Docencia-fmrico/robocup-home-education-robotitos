@@ -1,4 +1,4 @@
-// Copyright 2021 Intelligent Robotics Lab
+// Copyright 2019 Intelligent Robotics Lab
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,32 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "tf2/transform_datatypes.h"
+#include "tf2/LinearMath/Transform.h"
 
-#ifndef CARRY_MY_LUGGAGE_PID_H_
-#define CARRY_MY_LUGGAGE_PID_H_
-
-#include <cmath>
-#include <algorithm>
+#include "carry_my_luggage/transforms.h"
 
 namespace carry_my_luggage
 {
 
-class PID
+tf2::Vector3 transform_point(const tf2::Vector3 & input_point, const tf2::Transform & transform)
 {
-public:
-  PID(double min_ref, double max_ref, double min_output, double max_output);
-
-  void set_pid(double n_KP, double n_KI, double n_KD);
-  double get_output(double new_reference);
-
-private:
-  double KP_, KI_, KD_;
-
-  double min_ref_, max_ref_;
-  double min_output_, max_output_;
-  double prev_error_, int_error_;
-};
+  return  transform * input_point;
+}
 
 }  // namespace carry_my_luggage
-
-#endif  // CARRY_MY_LUGGAGE_PID_H_

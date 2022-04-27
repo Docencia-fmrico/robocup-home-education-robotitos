@@ -13,16 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CARRY_MY_LUGGAGE_BTNAVACTION_H
-#define CARRY_MY_LUGGAGE_BTNAVACTION_H
-
+#ifndef FIND_MY_MATES_BTNAVACTION_H
+#define FIND_MY_MATES_BTNAVACTION_H
 
 #include <ros/ros.h>
 
 #include "actionlib/client/simple_action_client.h"
 #include "move_base_msgs/MoveBaseAction.h"
 
-namespace carry_my_luggage
+namespace find_my_mates
 {
 class BTNavAction : public BT::ActionNodeBase
 {
@@ -132,6 +131,6 @@ private:
   bool nav_succeded_;
 };
 
-}  // namespace carry_my_luggage
+}  // namespace find_my_mates
 
-#endif  // CARRY_MY_LUGGAGE_BTNAVACTION_H
+#endif  // FIND_MY_MATES_BTNAVACTION_H

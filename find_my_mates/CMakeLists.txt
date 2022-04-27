@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(carry_my_luggage)
+project(find_my_mates)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -59,13 +59,13 @@ link_directories(
 )
 
 add_library(${PROJECT_NAME}
-  src/carry_my_luggage/DetectBag.cpp
-  src/carry_my_luggage/DetectObject.cpp
-  src/carry_my_luggage/GotoArena.cpp
-  src/carry_my_luggage/GotoReferee.cpp
-  src/carry_my_luggage/DetectPerson.cpp
-  src/carry_my_luggage/GotoPerson.cpp
-  src/carry_my_luggage/transforms.cpp
+  src/find_my_mates/GotoReferee.cpp
+  src/find_my_mates/GotoArena.cpp
+  src/find_my_mates/GotoPerson.cpp
+  src/find_my_mates/DetectPerson.cpp
+  src/find_my_mates/SayDescriptions.cpp
+  src/find_my_mates/GetDescriptions.cpp
+  src/find_my_mates/transforms.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
@@ -77,30 +77,28 @@ foreach(bt_plugin ${plugin_libs})
 endforeach()
 
 set(LINK_LIBS
-  carry_my_luggage
+  find_my_mates
   ${catkin_LIBRARIES}
 )
 
-add_executable(carry_my_luggage_node src/carry_my_luggage_node.cpp)
-target_link_libraries(carry_my_luggage_node ${catkin_LIBRARIES} ${PROJECT_NAME} ${OpenCV_LIBRARIES} ${LINK_LIBS})
+add_executable(find_my_mates_node src/find_my_mates_node.cpp)
+target_link_libraries(find_my_mates_node ${catkin_LIBRARIES} ${PROJECT_NAME} ${OpenCV_LIBRARIES} ${LINK_LIBS})
 
 set(ROSLINT_CPP_OPTS "--filter=-runtime/printf")
 
 roslint_cpp(
-  src/carry_my_luggage_node.cpp
-  src/carry_my_luggage/DetectBag.cpp
-  include/carry_my_luggage/DetectBag.h
-  src/carry_my_luggage/DetectObject.cpp
-  include/carry_my_luggage/DetectObject.h
-  src/carry_my_luggage/GotoArena.cpp
-  include/carry_my_luggage/GotoArena.h
-  src/carry_my_luggage/GotoReferee.cpp
-  include/carry_my_luggage/GotoReferee.h
-  src/carry_my_luggage/DetectPerson.cpp
-  include/carry_my_luggage/DetectPerson.h
-  include/carry_my_luggage/BTNavAction.h
-  src/carry_my_luggage/GotoPerson.cpp
-  include/carry_my_luggage/GotoPerson.h
-  src/carry_my_luggage/transforms.cpp 
-  include/carry_my_luggage/transforms.h
+  src/find_my_mates_node.cpp
+  include/find_my_mates/BTNavAction.h
+  src/find_my_mates/GotoReferee.cpp
+  include/find_my_mates/GotoReferee.h
+  src/find_my_mates/GotoPerson.cpp
+  include/find_my_mates/GotoPerson.h
+  src/find_my_mates/DetectPerson.cpp
+  include/find_my_mates/DetectPerson.h
+  src/find_my_mates/GetDescriptions.cpp
+  include/find_my_mates/GetDescriptions.h
+  src/find_my_mates/SayDescriptions.cpp
+  include/find_my_mates/SayDescriptions.h
+  src/find_my_mates/GotoArena.cpp
+  include/find_my_mates/GotoArena.h
 )

@@ -12,9 +12,10 @@
 
 #include "carry_my_luggage/DetectBag.h"
 #include "carry_my_luggage/DetectObject.h"
-#include "carry_my_luggage/FollowPerson.h"
+#include "carry_my_luggage/DetectPerson.h"
 #include "carry_my_luggage/GotoArena.h"
-#include "carry_my_luggage/GotoDoor.h"
+#include "carry_my_luggage/GotoReferee.h"
+#include "carry_my_luggage/GotoPerson.h"
 
 
 int main(int argc, char **argv)
@@ -25,20 +26,34 @@ int main(int argc, char **argv)
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
 
-  factory.registerNodeType<carry_my_luggage::FollowPerson>("FollowPerson");
+  factory.registerNodeType<carry_my_luggage::DetectPerson>("DetectPerson");
   factory.registerNodeType<carry_my_luggage::DetectBag>("DetectBag");
+  BT::NodeBuilder builder =
+    [](const std::string & name, const BT::NodeConfiguration & config)
+    {
+      return std::make_unique<carry_my_luggage::GotoPerson>(name, "move_base", config);
+    };
+
+  factory.registerBuilder<carry_my_luggage::GotoPerson>("GotoPerson", builder);
+  //factory.registerNodeType<carry_my_luggage::GotoPerson>("GotoPerson");
+  //factory.registerNodeType<carry_my_luggage::DetectObject>("DetectObject");
+  //factory.registerNodeType<carry_my_luggage::GotoArena>("GotoArena");
+  BT::NodeBuilder builder_2 =
+    [](const std::string & name, const BT::NodeConfiguration & config)
+    {
+      return std::make_unique<carry_my_luggage::GotoReferee>(name, "move_base", config);
+    };
+  factory.registerBuilder<carry_my_luggage::GotoReferee>("GotoReferee", builder_2);
 
   auto blackboard = BT::Blackboard::create();
 
   std::string pkgpath = ros::package::getPath("carry_my_luggage");
-  std::string xml_file = pkgpath + "/carry_my_luggage_xml/carry_my_luggage.xml";
+  std::string xml_file = pkgpath + "/carry_my_luggage_xml/carry_my_luggage1.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   ros::Rate loop_rate(10);
-
-  int count = 0;
 
   while (ros::ok())
   {

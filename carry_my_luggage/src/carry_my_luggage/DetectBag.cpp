@@ -16,7 +16,7 @@
 namespace carry_my_luggage
 {
 
-DetectBag::DetectBag(const std::string& name)
+DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& config)
 : BT::ActionNodeBase(name, {})
 {
   found_bag_ = false;
