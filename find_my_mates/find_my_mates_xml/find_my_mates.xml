@@ -6,19 +6,27 @@
             <Action ID="GotoArena"/>
             <Repeat num_cycles="3">
                 <Sequence>
-                    <Action ID="DetectPerson"/>
+                    <RetryUntilSuccessful num_attempts="6">
+                        <Sequence>
+                            <Action ID="GotoPerson"/>
+                            <Action ID="DetectPerson"/>
+                        </Sequence>
+                    </RetryUntilSuccessful>
                     <Action ID="GetDescriptions"/>
                 </Sequence>
             </Repeat>
-            <Action ID="GotoArbitro"/>
+            <Action ID="GotoReferee"/>
+            <Action ID="SayDescriptions"/>
         </Sequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
         <Action ID="DetectPerson"/>
         <Action ID="GetDescriptions"/>
-        <Action ID="GotoArbitro"/>
         <Action ID="GotoArena"/>
+        <Action ID="GotoPerson"/>
+        <Action ID="GotoReferee"/>
+        <Action ID="SayDescriptions"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

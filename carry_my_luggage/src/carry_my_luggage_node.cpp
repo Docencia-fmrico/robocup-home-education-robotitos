@@ -43,7 +43,7 @@ int main(int argc, char **argv)
   auto blackboard = BT::Blackboard::create();
 
   std::string pkgpath = ros::package::getPath("carry_my_luggage");
-  std::string xml_file = pkgpath + "/carry_my_luggage_xml/carry_my_luggage.xml";
+  std::string xml_file = pkgpath + "/carry_my_luggage_xml/carry_my_luggage1.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
