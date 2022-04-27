@@ -10,37 +10,38 @@
 
 #include "ros/package.h"
 
-#include "visual_behavior/MakeSound.h"
-#include "visual_behavior/DetectBall.h"
-#include "visual_behavior/DetectBallDist.h"
-#include "visual_behavior/Foward.h"
-#include "visual_behavior/Turn.h"
+#include "find_my_mates/DetectPerson.h"
+#include "find_my_mates/GotoReferee.h"
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "carry_my_luggage");
+  ros::init(argc, argv, "find_my_mates");
   ros::NodeHandle n;
 
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
 
-  factory.registerNodeType<visual_behavior::MakeSound>("MakeSound");
-  factory.registerNodeType<visual_behavior::DetectBall>("DetectBall");
-  factory.registerNodeType<visual_behavior::DetectBall>("DetectBallDist");
-  factory.registerNodeType<visual_behavior::Foward>("Foward");
-  factory.registerNodeType<visual_behavior::Turn>("Turn");
+  factory.registerNodeType<find_my_mates::DetectPerson>("DetectPerson");
+  factory.registerNodeType<find_my_mates::GotoReferee>("GotoReferee");
+  /*
+  BT::NodeBuilder builder =
+    [](const std::string & name, const BT::NodeConfiguration & config)
+    {
+      return std::make_unique<find_my_mates::GotoPerson>(name, "move_base", config);
+    };
+
+  factory.registerBuilder<find_my_mates::GotoPerson>("GotoPerson", builder);
+  */
 
   auto blackboard = BT::Blackboard::create();
 
-  std::string pkgpath = ros::package::getPath("carry_my_luggage");
-  std::string xml_file = pkgpath + "/visual_behavior_xml/carry_my_luggage.xml";
+  std::string pkgpath = ros::package::getPath("find_my_mates");
+  std::string xml_file = pkgpath + "/find_my_mates_xml/find_my_mates.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   ros::Rate loop_rate(10);
-
-  int count = 0;
 
   while (ros::ok())
   {
