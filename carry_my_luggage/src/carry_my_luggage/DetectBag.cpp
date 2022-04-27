@@ -50,7 +50,7 @@ DetectBag::tick()
 {
   if (status() == BT::NodeStatus::IDLE)
   {
-    ROS_INFO("ball");
+    ROS_INFO("Bag");
   }
 
   if (found_bag_) {
