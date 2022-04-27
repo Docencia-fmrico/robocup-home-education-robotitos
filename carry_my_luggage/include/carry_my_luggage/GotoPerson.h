@@ -30,7 +30,7 @@ class GotoPerson : public BTNavAction
     const BT::NodeConfiguration & config);
 
     void on_halt() override;
-    BT::NodeStatus on_tick() override;;
+    BT::NodeStatus on_tick() override;
     void on_start() override;
     void on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) override;
     void DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position);
@@ -53,4 +53,4 @@ class GotoPerson : public BTNavAction
 
 }  // namespace carry_my_luggage
 
-#endif  // CARRY_MY_LUGGAGE_GOTOPERSON_H
+#endif  // CARRY_MY_LUGGAGE_GOTOPERSON_H 

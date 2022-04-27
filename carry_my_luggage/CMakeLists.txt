@@ -62,7 +62,7 @@ add_library(${PROJECT_NAME}
   src/carry_my_luggage/DetectBag.cpp
   src/carry_my_luggage/DetectObject.cpp
   src/carry_my_luggage/GotoArena.cpp
-  src/carry_my_luggage/GotoDoor.cpp
+  src/carry_my_luggage/GotoReferee.cpp
   src/carry_my_luggage/DetectPerson.cpp
   src/carry_my_luggage/GotoPerson.cpp
   src/carry_my_luggage/transforms.cpp
@@ -94,8 +94,8 @@ roslint_cpp(
   include/carry_my_luggage/DetectObject.h
   src/carry_my_luggage/GotoArena.cpp
   include/carry_my_luggage/GotoArena.h
-  src/carry_my_luggage/GotoDoor.cpp
-  include/carry_my_luggage/GotoDoor.h
+  src/carry_my_luggage/GotoReferee.cpp
+  include/carry_my_luggage/GotoReferee.h
   src/carry_my_luggage/DetectPerson.cpp
   include/carry_my_luggage/DetectPerson.h
   include/carry_my_luggage/BTNavAction.h
