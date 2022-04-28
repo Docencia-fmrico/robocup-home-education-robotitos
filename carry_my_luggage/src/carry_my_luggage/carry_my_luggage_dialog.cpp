@@ -43,18 +43,17 @@ namespace ph = std::placeholders;
 namespace gb_dialog
 {
 
-Dialog::Dialog()
+Dialog::Dialog(): nh_()
 {
-    nh_();
     this->registerCallback(std::bind(&Dialog::noIntentCB, this, ph::_1));
     this->registerCallback(
         std::bind(&Dialog::welcomeIntentCB, this, ph::_1),
         "Default Welcome Intent");
     this->registerCallback(
-        std::bind(&Dialog::, this, ph::_1),
+        std::bind(&Dialog::detectBagIntentCB, this, ph::_1),
         "Jokes");
     this->registerCallback(
-        std::bind(&Dialog::funIntentCB, this, ph::_1),
+        std::bind(&Dialog::chooseBagIntentCB, this, ph::_1),
         "Fun");
 }
 
@@ -86,8 +85,7 @@ Dialog::chooseBagIntentCB(dialogflow_ros_msgs::DialogflowResult result)
     speak(result.fulfillment_text);
 }
 
-/*void
-Dialog::step()
+/*Dialog::step()
 {
     switch (state_)
     {
@@ -99,9 +97,8 @@ Dialog::step()
             state_ = SPEAK;
             break;
         case SPEAK:
-            if (speak() == false){
-                state_ = IDLE;
-            }
+            speak() == false;
+            state_ = IDLE;
             break;
     }
 }*/
@@ -113,9 +110,8 @@ Dialog::step()
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "robocup_dialog_node");
-  robocup_dialog::Dialog forwarder;
-  forwarder.speak("Ready to talk.");
-  
+  gb_dialog::Dialog forwarder;  
   forwarder.listen();
   ros::spin();
   return 0;
+}
