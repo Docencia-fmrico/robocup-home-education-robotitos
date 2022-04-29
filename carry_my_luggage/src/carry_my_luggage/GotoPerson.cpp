@@ -58,6 +58,7 @@ GotoPerson::on_tick()
 
   move_base_msgs::MoveBaseGoal goal;
   
+  
   if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(0.1), &error))
   {
     bf2person_msg = buffer.lookupTransform("base_footprint", "object/0", ros::Time(0));

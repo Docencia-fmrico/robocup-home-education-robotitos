@@ -1,10 +1,10 @@
-#ifndef CARRY_MY_LUGGAGE_GOTOPERSON_H
-#define CARRY_MY_LUGGAGE_GOTOPERSON_H
+#ifndef FIND_MY_MATES_GOTOPERSON_H
+#define FIND_MY_MATES_GOTOPERSON_H
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
 #include <move_base_msgs/MoveBaseAction.h>
-#include "carry_my_luggage/BTNavAction.h"
+#include "find_my_mates/BTNavAction.h"
 
 #include <tf/transform_broadcaster.h>
 #include <tf/message_filter.h>
@@ -19,7 +19,7 @@
 #include "ros/ros.h"
 #include <string>
 
-namespace carry_my_luggage
+namespace find_my_mates
 {
 
 class GotoPerson : public BTNavAction
@@ -51,6 +51,6 @@ class GotoPerson : public BTNavAction
     std::string error;
 };
 
-}  // namespace carry_my_luggage
+}  // namespace find_my_mates
 
-#endif  // CARRY_MY_LUGGAGE_GOTOPERSON_H
+#endif  // FIND_MY_MATES_GOTOPERSON_H

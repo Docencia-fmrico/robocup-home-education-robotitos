@@ -53,13 +53,25 @@ DetectPerson::DetectPerson(const std::string& name, const BT::NodeConfiguration 
 
 void DetectPerson::cloudCB(const sensor_msgs::PointCloud2::ConstPtr& cloud_in)
 {
+  sensor_msgs::PointCloud2 cloud;
+
+  try
+  {
+    pcl_ros::transformPointCloud(workingFrameId_, *cloud_in, cloud, tfListener_);
+  }
+  catch(tf::TransformException & ex)
+  {
+    ROS_ERROR_STREAM("Transform error of sensor data: " << ex.what() << ", quitting callback");
+    return;
+  }
+  
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcrgb(new pcl::PointCloud<pcl::PointXYZRGB>);
   pcl::fromROSMsg(*cloud_in, *pcrgb);
   int pixel =py*image_width +px;
   auto point = pcrgb->at(pixel);
   
   tf2::Stamped<tf2::Transform> transform;
-  if (found_person_==true) {
+  if (found_person_) {
     if (!std::isnan(point.x) && !std::isnan(point.y))
     {
       transform.setOrigin(tf2::Vector3(point.x, point.y, 0));
