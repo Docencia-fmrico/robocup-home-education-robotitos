@@ -17,7 +17,7 @@ GotoArena::GotoArena(
     const BT::NodeConfiguration& config)
 : BTNavAction(name, action_name, config)
 {
-    sub_laser_ = n_.subscribe("/scan",1,&GotoReferee::GotoRefereeCallBack,this);
+    sub_laser_ = n_.subscribe("/scan",1,&GotoArena::GotoArenaCallBack,this);
     obstacle_detected_ = true;
 }
 
