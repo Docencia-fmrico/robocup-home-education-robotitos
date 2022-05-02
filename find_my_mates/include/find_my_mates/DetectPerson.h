@@ -18,7 +18,6 @@ class DetectPerson : public BT::ConditionNode
   public:
     explicit DetectPerson(const std::string& name, const BT::NodeConfiguration & config);
 
-    void halt();
     BT::NodeStatus tick();
     void CounterCallBack(const darknet_ros_msgs::ObjectCount::ConstPtr& counter);
     void DetectPersonCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes);
