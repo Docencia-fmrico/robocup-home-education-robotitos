@@ -40,7 +40,7 @@ namespace carry_my_luggage
 
 DetectPerson::DetectPerson(const std::string& name, const BT::NodeConfiguration & config)
 : BT::ActionNodeBase(name, {}), sync_bbx(MySyncPolicy_bbx(10),image_depth_sub, bbx_sub), obstacle_detected_(false),
-  objectFrameId_("/object/0"), workingFrameId_("/base_footprint"), cameraTopicId_("/cloud_filtered/0"), found_person_(false)
+  objectFrameId_("/object/0"), workingFrameId_("/base_footprint"), cameraTopicId_("/camera/depth_registered/points"), found_person_(false)
 { 
   image_depth_sub.subscribe(n_, "/camera/depth/image_raw", 1);
   bbx_sub.subscribe(n_, "/darknet_ros/bounding_boxes", 1);
@@ -74,7 +74,7 @@ void DetectPerson::cloudCB(const sensor_msgs::PointCloud2::ConstPtr& cloud_in)
   if (found_person_) {
     if (!std::isnan(point.x) && !std::isnan(point.y))
     {
-      transform.setOrigin(tf2::Vector3(point.x, point.y, 0));
+      transform.setOrigin(tf2::Vector3(point.y, point.x, 0));
       transform.setRotation(tf2::Quaternion(0.0, 0.0, 0.0, 1.0));
       std::cout << "point.x: " << point.x << " point.y: " << point.y << std::endl;
       std::cout << "px: " << px << " py: " << py << std::endl;

@@ -15,9 +15,9 @@
 #include <chrono>
 #include <string>
 
-#include "nav2_behavior_tree/plugins/decorator/rate_controller.hpp"
+#include "carry_my_luggage/rate_controller.h"
 
-namespace nav2_behavior_tree
+namespace carry_my_luggage
 {
 
 RateController::RateController(
@@ -76,10 +76,4 @@ BT::NodeStatus RateController::tick()
   return status();
 }
 
-}  // namespace nav2_behavior_tree
-
-#include "behaviortree_cpp_v3/bt_factory.h"
-BT_REGISTER_NODES(factory)
-{
-  factory.registerNodeType<nav2_behavior_tree::RateController>("RateController");
-}
+}  // namespace carry_my_luggage

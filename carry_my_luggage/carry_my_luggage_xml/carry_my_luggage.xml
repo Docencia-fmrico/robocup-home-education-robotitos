@@ -7,7 +7,9 @@
             <Action ID="DetectBag"/>
             <ReactiveFallback>
                 <Action ID="DetectObject"/>
-                <Action ID="FollowPerson"/>
+                <Decorator ID="rate_controller" hz="10">
+                    <Action ID="FollowPerson"/>
+                </Decorator>
             </ReactiveFallback>
             <ReactiveFallback>
                 <Action ID="DetectObject"/>
@@ -22,6 +24,9 @@
         <Action ID="FollowPerson"/>
         <Action ID="GotoArena"/>
         <Action ID="GotoDoor"/>
+        <Decorator ID="rate_controller">
+            <input_port name="hz"/>
+        </Decorator>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>
