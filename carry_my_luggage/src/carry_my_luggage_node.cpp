@@ -16,7 +16,6 @@
 #include "carry_my_luggage/GotoArena.h"
 #include "carry_my_luggage/GotoReferee.h"
 #include "carry_my_luggage/GotoPerson.h"
-#include "carry_my_luggage/rate_controller.h"
 
 
 int main(int argc, char **argv)
@@ -45,8 +44,6 @@ int main(int argc, char **argv)
       return std::make_unique<carry_my_luggage::GotoReferee>(name, "move_base", config);
     };
   factory.registerBuilder<carry_my_luggage::GotoReferee>("GotoReferee", builder_2);
-
-  factory.registerNodeType<carry_my_luggage::RateController>("rate_controller");
 
   auto blackboard = BT::Blackboard::create();
 

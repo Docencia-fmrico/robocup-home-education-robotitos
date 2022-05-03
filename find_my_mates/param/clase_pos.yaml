@@ -10,38 +10,14 @@ inicial:
   z_orientation: -0.75
   w_orientation: 1.0
 
-person_1:
-  x_position: -5.05
-  y_position: -2.55
-  z_orientation: 0.10
-  w_orientation: 1.0
+person_1: [-5.05, 2.55, 0.10, 1.0]
 
-person_2:
-  x_position: -4.65
-  y_position: -3.85
-  z_orientation: 0.05
-  w_orientation: 1.0
+person_2: [-4.65, -3.85, 0.05, 1.0]
 
-person_3:
-  x_position: -4.65
-  y_position: -4.80
-  z_orientation: 0.50
-  w_orientation: 1.0
+person_3: [-4.65, -4.80, 0.50, 1.0]
 
-person_4:
-  x_position: -3.65
-  y_position: -4.35
-  z_orientation: -0.65
-  w_orientation: 1.0
+person_4: [-3.65, -4.35, -0.65, 1.0]
 
-person_5:
-  x_position: -0.55
-  y_position: -4.15
-  z_orientation: 0.70
-  w_orientation: 1.0
+person_5: [-0.55, -4.15, 0.70, 1.0]
 
-person_6:
-  x_position: -2.45
-  y_position: -1.95
-  z_orientation: -0.99
-  w_orientation: 1.0
+person_6: [-2.45, -1.95, -0.99, 1.0]

@@ -2,9 +2,10 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-        <ReactiveFallback>
-                <Action ID="DetectPerson"/>
-            </ReactiveFallback>
+        <ReactiveSequence>
+            <Action ID="DetectPerson"/>
+            <Action ID="GotoPerson"/>
+        </ReactiveSequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>

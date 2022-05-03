@@ -24,22 +24,14 @@ GotoPerson::GotoPerson(
   const std::string& name,
   const std::string & action_name,
   const BT::NodeConfiguration & config)
-: BTNavAction(name, action_name, config), listener(buffer)
+: BTNavAction(name, action_name, config), listener(buffer), counter_(0)
 { 
-  direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
 }
 
 void
 GotoPerson::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 {
 	ROS_INFO("Current count %lf", feedback->base_position.pose.position.x);
-}
-
-void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position) {
-  directions.target_pose.pose.orientation.x = position.get()->pose.pose.orientation.x;
-  directions.target_pose.pose.orientation.y = position.get()->pose.pose.orientation.y;
-  directions.target_pose.pose.orientation.z = position.get()->pose.pose.orientation.z;
-  directions.target_pose.pose.orientation.w = position.get()->pose.pose.orientation.w;
 }
 
 void
@@ -57,36 +49,58 @@ GotoPerson::on_tick()
   }
 
   move_base_msgs::MoveBaseGoal goal;
-  
-  
-  if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(0.1), &error))
-  {
-    bf2person_msg = buffer.lookupTransform("base_footprint", "object/0", ros::Time(0));
 
-    tf2::fromMsg(bf2person_msg, bf2person);
+  if (counter_++ == 10)
+  {
+    if (buffer.canTransform("map", "base_footprint", ros::Time(0), ros::Duration(0.1), &error))
+    {
+      map2bf_msg = buffer.lookupTransform("map", "base_footprint", ros::Time(0));
+
+      tf2::fromMsg(map2bf_msg, map2bf);
+    }
+    else
+    {
+      ROS_ERROR("%s", error.c_str());
+    }
+
+    if (buffer.canTransform("base_footprint", "odom", ros::Time(0), ros::Duration(0.1), &error))
+    {
+      bf2odom_msg = buffer.lookupTransform("base_footprint", "odom", ros::Time(0));
+
+      tf2::fromMsg(bf2odom_msg, bf2odom);
+    }
+    else
+    {
+      ROS_ERROR("%s", error.c_str());
+    }
+
+    if (buffer.canTransform("odom", "object/0", ros::Time(0), ros::Duration(0.5), &error))
+    {
+      odom2obj_msg = buffer.lookupTransform("odom", "object/0", ros::Time(0));
+
+      tf2::fromMsg(odom2obj_msg, odom2obj);
+    }
+    else
+    {
+      ROS_ERROR("%s", error.c_str());
+    }
     
-    double dist = bf2person.getOrigin().length();
-    double angle = atan2(bf2person.getOrigin().y(), bf2person.getOrigin().x());
-    
-    //es la forma de obtener los valores de los ejes de rotacion
-    //Se imprime los valores obtenidos antes de las coordenadas
-    ROS_INFO("base_footprint -> person [%lf, %lf] dist=%lf angle=%lf %lf ago", bf2person.getOrigin().x(), bf2person.getOrigin().y(), dist, angle, (ros::Time::now() - bf2person.stamp_).toSec());
-    
+    bf2obj = map2bf * bf2odom * odom2obj;
+
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
-    goal.target_pose.pose.position.x = bf2person.getOrigin().x();
-    goal.target_pose.pose.position.y = bf2person.getOrigin().y();
-    goal.target_pose.pose.position.z = bf2person.getOrigin().z();
-    goal.target_pose.pose.orientation.x = directions.target_pose.pose.orientation.x;
-    goal.target_pose.pose.orientation.y = directions.target_pose.pose.orientation.y;
-    goal.target_pose.pose.orientation.z = directions.target_pose.pose.orientation.z;
-    goal.target_pose.pose.orientation.w = directions.target_pose.pose.orientation.w;
+    goal.target_pose.pose.position.x = bf2obj.getOrigin().x();
+    goal.target_pose.pose.position.y = bf2obj.getOrigin().y();
+    goal.target_pose.pose.position.z = bf2obj.getOrigin().z();
+    goal.target_pose.pose.orientation.x = 0.0;
+    goal.target_pose.pose.orientation.y = 0.0;
+    goal.target_pose.pose.orientation.z = atan2(bf2obj.getOrigin().y(), bf2obj.getOrigin().x());
+    goal.target_pose.pose.orientation.w = 1.0;
 
     set_goal(goal);
-
-  } else {
-    return BT::NodeStatus::FAILURE;
+    counter_ =0;
   }
+
   return BT::NodeStatus::RUNNING;
 }
 

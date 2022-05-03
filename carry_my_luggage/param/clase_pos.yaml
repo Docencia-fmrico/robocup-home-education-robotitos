@@ -9,3 +9,9 @@ inicial:
   y_position: 4.70
   z_orientation: -0.75
   w_orientation: 1.0
+
+pasillo:
+  x_position: 1.15
+  y_position: 4.70
+  z_orientation: -0.75
+  w_orientation: 1.0

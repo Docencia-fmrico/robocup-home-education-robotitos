@@ -56,22 +56,19 @@ GotoPerson::on_tick()
   /*
   move_base_msgs::MoveBaseGoal goal;
   
-    goal.target_pose.header.frame_id = "map";
-    goal.target_pose.header.stamp = ros::Time::now();
-    goal.target_pose.pose.position.x = bf2person.getOrigin().x();
-    goal.target_pose.pose.position.y = bf2person.getOrigin().y();
-    goal.target_pose.pose.position.z = bf2person.getOrigin().z();
-    goal.target_pose.pose.orientation.x = directions.target_pose.pose.orientation.x;
-    goal.target_pose.pose.orientation.y = directions.target_pose.pose.orientation.y;
-    goal.target_pose.pose.orientation.z = directions.target_pose.pose.orientation.z;
-    goal.target_pose.pose.orientation.w = directions.target_pose.pose.orientation.w;
+  goal.target_pose.header.frame_id = "map";
+  goal.target_pose.header.stamp = ros::Time::now();
+  goal.target_pose.pose.position.x = bf2person.getOrigin().x();
+  goal.target_pose.pose.position.y = bf2person.getOrigin().y();
+  goal.target_pose.pose.position.z = bf2person.getOrigin().z();
+  goal.target_pose.pose.orientation.x = directions.target_pose.pose.orientation.x;
+  goal.target_pose.pose.orientation.y = directions.target_pose.pose.orientation.y;
+  goal.target_pose.pose.orientation.z = directions.target_pose.pose.orientation.z;
+  goal.target_pose.pose.orientation.w = directions.target_pose.pose.orientation.w;
 
-    set_goal(goal);
-
-  } else {
-
-  }*/
-  return BT::NodeStatus::SUCCESS;
+  set_goal(goal);
+  */
+  return BT::NodeStatus::RUNNING;
 }
 
 }  // namespace find_my_mates

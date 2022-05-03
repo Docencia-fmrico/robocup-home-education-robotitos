@@ -69,7 +69,6 @@ add_library(${PROJECT_NAME}
   src/carry_my_luggage/GotoPerson.cpp
   src/carry_my_luggage/transforms.cpp
   src/carry_my_luggage/CMLDialog.cpp
-  src/carry_my_luggage/rate_controller.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
@@ -107,10 +106,6 @@ roslint_cpp(
   include/carry_my_luggage/GotoPerson.h
   src/carry_my_luggage/transforms.cpp 
   include/carry_my_luggage/transforms.h
-
   src/carry_my_luggage/CMLDialog.cpp 
   include/carry_my_luggage/CMLDialog.h
-
-  src/carry_my_luggage/rate_controller.cpp
-  include/carry_my_luggage/rate_controller.h
 )
