@@ -7,7 +7,7 @@
 
 namespace carry_my_luggage
 {
-class Dialog: public DialogInterface
+class Dialog: public DialogInterface : public BT::ActionNodeBase
 {
     public:
         Dialog();
