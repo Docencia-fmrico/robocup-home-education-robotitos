@@ -26,12 +26,20 @@ GotoPerson::GotoPerson(
   const BT::NodeConfiguration & config)
 : BTNavAction(name, action_name, config), listener(buffer), counter_(0)
 { 
+  direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
 }
 
 void
 GotoPerson::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 {
 	ROS_INFO("Current count %lf", feedback->base_position.pose.position.x);
+}
+
+void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position) {
+  directions.target_pose.pose.orientation.x = position.get()->pose.pose.orientation.x;
+  directions.target_pose.pose.orientation.y = position.get()->pose.pose.orientation.y;
+  directions.target_pose.pose.orientation.z = position.get()->pose.pose.orientation.z;
+  directions.target_pose.pose.orientation.w = position.get()->pose.pose.orientation.w;
 }
 
 void
@@ -92,10 +100,10 @@ GotoPerson::on_tick()
     goal.target_pose.pose.position.x = bf2obj.getOrigin().x();
     goal.target_pose.pose.position.y = bf2obj.getOrigin().y();
     goal.target_pose.pose.position.z = bf2obj.getOrigin().z();
-    goal.target_pose.pose.orientation.x = 0.0;
-    goal.target_pose.pose.orientation.y = 0.0;
-    goal.target_pose.pose.orientation.z = atan2(bf2obj.getOrigin().y(), bf2obj.getOrigin().x());
-    goal.target_pose.pose.orientation.w = 1.0;
+    goal.target_pose.pose.orientation.x = directions.target_pose.pose.orientation.x;
+    goal.target_pose.pose.orientation.y = directions.target_pose.pose.orientation.y;
+    goal.target_pose.pose.orientation.z = directions.target_pose.pose.orientation.z;
+    goal.target_pose.pose.orientation.w = directions.target_pose.pose.orientation.w;
 
     set_goal(goal);
     counter_ =0;
