@@ -15,6 +15,8 @@
 #include <sensor_msgs/Image.h>
 #include "sensor_msgs/LaserScan.h"
 
+#include "DialogInterface.h"
+
 #include "ros/ros.h"
 #include <string>
 
