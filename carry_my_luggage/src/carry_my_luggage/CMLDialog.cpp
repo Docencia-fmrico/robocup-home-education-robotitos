@@ -36,46 +36,69 @@
 
 /* Mantainer: Jaime Avilleira j.avilleira.2019@alumnos.urjc.es*/
 #include "gb_dialog/DialogInterface.h"
-#include "gb_dialog/robocup_dialog.h"
+#include "CMLDialog.h"
 #include <string>
+#include <iostream>
 
 namespace ph = std::placeholders;
-namespace gb_dialog
+namespace carry_my_luggage
 {
 
-Dialog::Dialog()
+Dialog::Dialog(): nh_()
 {
-    nh_();
     this->registerCallback(std::bind(&Dialog::noIntentCB, this, ph::_1));
     this->registerCallback(
         std::bind(&Dialog::welcomeIntentCB, this, ph::_1),
         "Default Welcome Intent");
     this->registerCallback(
-        std::bind(&Dialog::, this, ph::_1),
-        "Jokes");
+        std::bind(&Dialog::detectBagIntentCB, this, ph::_1),
+        "DetectBag");
     this->registerCallback(
-        std::bind(&Dialog::funIntentCB, this, ph::_1),
-        "Fun");
+        std::bind(&Dialog::chooseBagIntentCB, this, ph::_1),
+        "Choose Bag");
 }
+
+std::string
+Dialog::getContext(dialogflow_ros_msgs::DialogflowResult result)
+{
+    for (const auto & param : result.contexts) {
+        context_ = param.name;
+        context_ = context_.substr(87);
+        std::cerr << "Param: " << context_ << std::endl;
+    }
+    return context_;
+}
+
+std::string
+Dialog::getIntent(dialogflow_ros_msgs::DialogflowResult result)
+{
+    intent_ = result.intent.c_str();
+    ROS_INFO("ueue[%s]", result.intent.c_str());
+    return intent_;
+}
+
 
 void
 Dialog::noIntentCB(dialogflow_ros_msgs::DialogflowResult result)
 {
     ROS_INFO("[Dialog] noIntentCB: intent [%s]", result.intent.c_str());
-    speak("I don't understand you");
+    getIntent(result);
+    speak(result.fulfillment_text);
 }
 
 void 
 Dialog::welcomeIntentCB(dialogflow_ros_msgs::DialogflowResult result)
 {
-  ROS_INFO("[Dialog] welcomeIntentCB: intent [%s]", result.intent.c_str());
+  ROS_INFO("[------------------Dialog] welcomeIntentCB: intent [%s]", result.intent.c_str());
   speak(result.fulfillment_text);
 }
 
 void
 Dialog::detectBagIntentCB(dialogflow_ros_msgs::DialogflowResult result)
 {
+    getIntent(result);
     ROS_INFO("[Dialog] detectBagIntentCB: intent [%s]", result.intent.c_str());
+    getContext(result);
     speak(result.fulfillment_text);
 }
 
@@ -86,25 +109,34 @@ Dialog::chooseBagIntentCB(dialogflow_ros_msgs::DialogflowResult result)
     speak(result.fulfillment_text);
 }
 
-/*void
+void
 Dialog::step()
 {
+    dialogflow_ros_msgs::DialogflowResult result;
     switch (state_)
     {
         case IDLE:
+            if (intent_ == "Default Fallback Intent")
+            {
+                state_ = LISTEN;
+                std::cerr << "tugatita" << std::endl;
+                break;
+            }
             state_ = LISTEN;
             break;
         case LISTEN:
             listen();
+            speak_ts_ = ros::Time::now();
             state_ = SPEAK;
             break;
         case SPEAK:
-            if (speak() == false){
+            if ((ros::Time::now() - speak_ts_).toSec() >= 3)
+            {
                 state_ = IDLE;
             }
             break;
     }
-}*/
+}
 
 
 
@@ -113,9 +145,12 @@ Dialog::step()
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "robocup_dialog_node");
-  robocup_dialog::Dialog forwarder;
-  forwarder.speak("Ready to talk.");
-  
-  forwarder.listen();
-  ros::spin();
+  gb_dialog::Dialog forwarder;
+  ros::Rate loop_rate(20);
+  while (ros::ok()){
+      forwarder.step();
+      ros::spinOnce();
+      loop_rate.sleep();
+  }
   return 0;
+}
