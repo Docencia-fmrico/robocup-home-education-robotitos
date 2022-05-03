@@ -11,6 +11,8 @@ class Dialog: public DialogInterface
 {
     public:
         Dialog();
+        std::string getContext(dialogflow_ros_msgs::DialogflowResult result);
+        std::string getIntent(dialogflow_ros_msgs::DialogflowResult result);
         void noIntentCB(dialogflow_ros_msgs::DialogflowResult result);
         void welcomeIntentCB(dialogflow_ros_msgs::DialogflowResult result);
         void detectBagIntentCB(dialogflow_ros_msgs::DialogflowResult result);
@@ -18,9 +20,12 @@ class Dialog: public DialogInterface
         void step();
     private:
         int state_;
+        std::string context_;
+        std::string intent_;
         static const int IDLE = 0;
         static const int SPEAK = 1;
         static const int LISTEN = 2;
+        ros::Time speak_ts_;
         ros::NodeHandle nh_;
 };
 } //namespace robocup_dialog
