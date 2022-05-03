@@ -36,12 +36,12 @@
 
 /* Mantainer: Jaime Avilleira j.avilleira.2019@alumnos.urjc.es*/
 #include "gb_dialog/DialogInterface.h"
-#include "gb_dialog/robocup_dialog.h"
+#include "CMLDialog.h"
 #include <string>
 #include <iostream>
 
 namespace ph = std::placeholders;
-namespace gb_dialog
+namespace carry_my_luggage
 {
 
 Dialog::Dialog(): nh_()

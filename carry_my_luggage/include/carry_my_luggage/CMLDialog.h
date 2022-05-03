@@ -1,11 +1,11 @@
-#ifndef ROBOCUP_DIALOG_H
-#define ROBOCUP_DIALOG_H
+#ifndef CML_DIALOG_H
+#define CML_DIALOG_H
 
-#include "DialogInterface.h"
+#include "dialog/*"
 #include "ros/ros.h"
 #include <string>
 
-namespace gb_dialog
+namespace carry_my_luggage
 {
 class Dialog: public DialogInterface
 {
