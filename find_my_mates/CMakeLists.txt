@@ -101,4 +101,6 @@ roslint_cpp(
   include/find_my_mates/SayDescriptions.h
   src/find_my_mates/GotoArena.cpp
   include/find_my_mates/GotoArena.h
+  src/find_my_mates/transforms.cpp
+  include/find_my_mates/transforms.h
 )
