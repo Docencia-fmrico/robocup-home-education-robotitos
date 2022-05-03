@@ -3,7 +3,7 @@
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
 #include <move_base_msgs/MoveBaseAction.h>
-#include "carry_my_luggage/BTNavAction.h"
+#include "find_my_mates/BTNavAction.h"
 
 #include "ros/ros.h"
 #include <string>
@@ -28,7 +28,15 @@ GotoPerson::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback
 }
 
 void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position) {
-  directions = position;
+  directions.target_pose.header.stamp = position.get()->header.stamp;
+  directions.target_pose.pose.position.x = position.get()->pose.pose.position.x;
+  directions.target_pose.pose.position.y = position.get()->pose.pose.position.y;
+  directions.target_pose.pose.position.z = position.get()->pose.pose.position.z;
+
+  directions.target_pose.pose.orientation.x = position.get()->pose.pose.orientation.x;
+  directions.target_pose.pose.orientation.y = position.get()->pose.pose.orientation.y;
+  directions.target_pose.pose.orientation.z = position.get()->pose.pose.orientation.z;
+  directions.target_pose.pose.orientation.w = position.get()->pose.pose.orientation.w;
 }
 
 void
@@ -45,7 +53,8 @@ GotoPerson::on_tick()
     ROS_INFO("Siguiendo a la persona");
   }
 
-  move_base_msgs::MoveBaseGoal goal;8
+  /*
+  move_base_msgs::MoveBaseGoal goal;
   
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
@@ -61,8 +70,8 @@ GotoPerson::on_tick()
 
   } else {
 
-  }
-  return BT::NodeStatus::RUNNING;
+  }*/
+  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace find_my_mates

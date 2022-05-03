@@ -1,14 +1,14 @@
-#include "carry_my_luggage/GotoReferee.h"
+#include "find_my_mates/GotoReferee.h"
 #include <ros/ros.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include "sensor_msgs/LaserScan.h"
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
-#include "carry_my_luggage/BTNavAction.h"
+#include "find_my_mates/BTNavAction.h"
 #include <string.h>
 
-namespace carry_my_luggage
+namespace find_my_mates
 {
 
 GotoReferee::GotoReferee(
@@ -55,4 +55,4 @@ GotoReferee::on_tick()
     return BT::NodeStatus::RUNNING;
 }
 
-}   // namespace carry_my_luggage
+}   // namespace find_my_mates

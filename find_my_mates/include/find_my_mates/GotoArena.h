@@ -1,17 +1,17 @@
-#ifndef CARRY_MY_LUGGAGE_GOTOARENA_H
-#define CARRY_MY_LUGGAGE_GOTOARENA_H
+#ifndef FIND_MY_MATES_GOTOARENA_H
+#define FIND_MY_MATES_GOTOARENA_H
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
 #include <move_base_msgs/MoveBaseAction.h>
-#include "carry_my_luggage/BTNavAction.h"
+#include "find_my_mates/BTNavAction.h"
 #include "sensor_msgs/LaserScan.h"
 #include "ros/ros.h"
 
 #define SECURITY_DISTANCE 0.45
 #define CENTER_LASER 540
 
-namespace carry_my_luggage
+namespace find_my_mates
 {
 
 class GotoArena : public BTNavAction
@@ -40,6 +40,6 @@ class GotoArena : public BTNavAction
     double dist_;
 };
 
-}  // namespace carry_my_luggage
+}  // namespace find_my_mates
 
-#endif  // CARRY_MY_LUGGAGE_GOTOARENA_H 
+#endif  // FIND_MY_MATES_GOTOARENA_H 

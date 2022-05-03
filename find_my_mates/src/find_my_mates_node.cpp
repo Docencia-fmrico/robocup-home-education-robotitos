@@ -22,16 +22,13 @@ int main(int argc, char **argv)
   BT::SharedLibrary loader;
 
   factory.registerNodeType<find_my_mates::DetectPerson>("DetectPerson");
-  factory.registerNodeType<find_my_mates::GotoReferee>("GotoReferee");
-  /*
   BT::NodeBuilder builder =
     [](const std::string & name, const BT::NodeConfiguration & config)
     {
-      return std::make_unique<find_my_mates::GotoPerson>(name, "move_base", config);
+      return std::make_unique<find_my_mates::GotoReferee>(name, "move_base", config);
     };
 
-  factory.registerBuilder<find_my_mates::GotoPerson>("GotoPerson", builder);
-  */
+  factory.registerBuilder<find_my_mates::GotoReferee>("GotoReferee", builder);
 
   auto blackboard = BT::Blackboard::create();
 
