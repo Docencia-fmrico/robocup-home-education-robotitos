@@ -1,4 +1,5 @@
-#include "carry_my_luggage/DetectBag.h"
+#include <carry_my_luggage/DetectBag.h>
+#include "CMLDialog.h"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include <image_transport/image_transport.h>
@@ -22,7 +23,9 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
   found_bag_ = false;
   pixel_counter_ = 0;
   sub_hsv_ = n_.subscribe("/hsv/image_filtered",1,&DetectBag::DetectBagCallBack,this);
+  carry_my_luggage::Dialog fowarder;
 }
+
 
 void
 DetectBag::DetectBagCallBack(const sensor_msgs::Image::ConstPtr& image) {

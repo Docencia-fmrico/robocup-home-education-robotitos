@@ -15,15 +15,16 @@
 
 namespace carry_my_luggage
 {
-
 class DetectBag : public BT::ActionNodeBase
 {
   public:
     explicit DetectBag(const std::string& name, const BT::NodeConfiguration& config);
+    void step();
 
     BT::NodeStatus tick();
     void halt();
     void DetectBagCallBack(const sensor_msgs::Image::ConstPtr& image);
+
 
     static BT::PortsList providedPorts()
     {
@@ -36,6 +37,28 @@ class DetectBag : public BT::ActionNodeBase
     ros::NodeHandle n_;
     ros::Subscriber sub_hsv_;
 };
+
+/*class Dialog : public DialogInterface
+{
+  public: 
+    Dialog();
+    std::string getContext(dialogflow_ros_msgs::DialogflowResult result);
+    std::string getIntent(dialogflow_ros_msgs::DialogflowResult result);
+    void noIntentCB(dialogflow_ros_msgs::DialogflowResult result);
+    void welcomeIntentCB(dialogflow_ros_msgs::DialogflowResult result);
+    void detectBagIntentCB(dialogflow_ros_msgs::DialogflowResult result);
+    void chooseBagIntentCB(dialogflow_ros_msgs::DialogflowResult result);
+
+  private:
+    int state_;
+    std::string context_;
+    std::string intent_;
+    static const int IDLE = 0;
+    static const int SPEAK = 1;
+    static const int LISTEN = 2;
+    ros::Time speak_ts_;
+
+};*/
 
 }  // namespace carry_my_luggage
 

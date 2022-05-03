@@ -1,16 +1,19 @@
-#ifndef CML_DIALOG_H
-#define CML_DIALOG_H
+#ifndef CARRY_MY_LUGGAGE_CML_DIALOG_H
+#define CARRY_MY_LUGGAGE_CML_DIALOG_H
 
-#include "dialog/*"
+#include <gb_dialog/DialogInterface.h>
 #include "ros/ros.h"
 #include <string>
 
+namespace ph = std::placeholders;
+
 namespace carry_my_luggage
 {
-class Dialog: public DialogInterface : public BT::ActionNodeBase
+
+class Dialog : public gb_dialog::DialogInterface
 {
     public:
-        Dialog();
+        explicit Dialog();
         std::string getContext(dialogflow_ros_msgs::DialogflowResult result);
         std::string getIntent(dialogflow_ros_msgs::DialogflowResult result);
         void noIntentCB(dialogflow_ros_msgs::DialogflowResult result);
@@ -28,7 +31,8 @@ class Dialog: public DialogInterface : public BT::ActionNodeBase
         ros::Time speak_ts_;
         ros::NodeHandle nh_;
 };
-} //namespace robocup_dialog
+
+} //namespace carry_my_luggage
 
 
-#endif //ROBOCUP_DIALOG_H
+#endif // CARRY_MY_LUGGAGE_CML_DIALOG_H

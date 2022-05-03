@@ -35,8 +35,8 @@
 /* Author: Jaime Avilleira j.avilleira.2019@alumnos.urjc.es */
 
 /* Mantainer: Jaime Avilleira j.avilleira.2019@alumnos.urjc.es*/
-#include "gb_dialog/DialogInterface.h"
-#include "CMLDialog.h"
+#include <gb_dialog/DialogInterface.h>
+#include "carry_my_luggage/CMLDialog.h"
 #include <string>
 #include <iostream>
 
@@ -44,7 +44,7 @@ namespace ph = std::placeholders;
 namespace carry_my_luggage
 {
 
-Dialog::Dialog(): nh_()
+Dialog::Dialog()
 {
     this->registerCallback(std::bind(&Dialog::noIntentCB, this, ph::_1));
     this->registerCallback(
@@ -119,7 +119,6 @@ Dialog::step()
             if (intent_ == "Default Fallback Intent")
             {
                 state_ = LISTEN;
-                std::cerr << "tugatita" << std::endl;
                 break;
             }
             state_ = LISTEN;
@@ -142,7 +141,7 @@ Dialog::step()
 
 } //namespace robocup_dialog
 
-int main(int argc, char** argv)
+/*int main(int argc, char** argv)
 {
   ros::init(argc, argv, "robocup_dialog_node");
   gb_dialog::Dialog forwarder;
@@ -153,4 +152,4 @@ int main(int argc, char** argv)
       loop_rate.sleep();
   }
   return 0;
-}
+}*/
