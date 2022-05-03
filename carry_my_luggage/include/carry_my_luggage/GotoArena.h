@@ -25,7 +25,6 @@ class GotoArena : public BTNavAction
     BT::NodeStatus on_tick() override;
     void on_start() override;
     void on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) override;
-    void GotoArenaCallBack(const sensor_msgs::LaserScan::ConstPtr& laser);
 
      static BT::PortsList providedPorts()
     {
@@ -34,10 +33,7 @@ class GotoArena : public BTNavAction
 
   private:
     ros::NodeHandle n_;
-    ros::Subscriber sub_laser_;
-    move_base_msgs::MoveBaseGoal pos_referee_;
-    bool obstacle_detected_;
-    double dist_;
+    int counter_;
 };
 
 }  // namespace carry_my_luggage
