@@ -39,16 +39,12 @@ class GotoPerson : public BTNavAction
       return {};
     }
   private:
+    double person_1 = [-5.05, 2.55, 0.10, 1.0];
+    double person_2 = [-4.65, -3.85, 0.05, 1.0];
+    double person_3 = [-4.65, -4.80, 0.50, 1.0];
+    double person = [person_1, person_2, person_3, person_4, person_5, person_6];
     ros::NodeHandle n_;
 
-    tf2_ros::Buffer buffer;
-    tf2_ros::TransformListener listener;
-    ros::Subscriber direction_;
-    move_base_msgs::MoveBaseGoal directions;
-
-    geometry_msgs::TransformStamped bf2person_msg;
-    tf2::Stamped<tf2::Transform> bf2person;
-    std::string error;
 };
 
 }  // namespace find_my_mates

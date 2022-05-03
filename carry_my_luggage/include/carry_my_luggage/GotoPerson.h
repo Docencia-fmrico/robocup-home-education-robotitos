@@ -33,7 +33,6 @@ class GotoPerson : public BTNavAction
     BT::NodeStatus on_tick() override;
     void on_start() override;
     void on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) override;
-    void DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position);
 
     static BT::PortsList providedPorts() {
       return {};
@@ -43,12 +42,17 @@ class GotoPerson : public BTNavAction
 
     tf2_ros::Buffer buffer;
     tf2_ros::TransformListener listener;
-    ros::Subscriber direction_;
-    move_base_msgs::MoveBaseGoal directions;
 
-    geometry_msgs::TransformStamped bf2person_msg;
-    tf2::Stamped<tf2::Transform> bf2person;
+    geometry_msgs::TransformStamped bf2odom_msg;
+    geometry_msgs::TransformStamped odom2obj_msg;
+    geometry_msgs::TransformStamped map2bf_msg;
+    tf2::Stamped<tf2::Transform> odom2obj;
+    tf2::Stamped<tf2::Transform> bf2odom;
+    tf2::Stamped<tf2::Transform> map2bf;
+    tf2::Transform bf2obj;
     std::string error;
+
+    int counter_;
 };
 
 }  // namespace carry_my_luggage

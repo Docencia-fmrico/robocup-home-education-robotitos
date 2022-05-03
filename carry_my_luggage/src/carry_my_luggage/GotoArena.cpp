@@ -17,8 +17,6 @@ GotoArena::GotoArena(
     const BT::NodeConfiguration& config)
 : BTNavAction(name, action_name, config)
 {
-    sub_laser_ = n_.subscribe("/scan",1,&GotoArena::GotoArenaCallBack,this);
-    obstacle_detected_ = true;
 }
 
 void
@@ -27,44 +25,57 @@ GotoArena::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 	ROS_INFO("Current count %lf", feedback->base_position.pose.position.x);
 }
 
-void GotoArena::GotoArenaCallBack(const sensor_msgs::LaserScan::ConstPtr& laser)
-{
-    if (obstacle_detected_)
-    {
-        dist_ = laser->ranges[CENTER_LASER];
-        obstacle_detected_ = dist_ < SECURITY_DISTANCE;
-    }
-}
 
 void
 GotoArena::on_halt() {}
 
 void
-GotoArena::on_start() {}
+GotoArena::on_start() {
+    move_base_msgs::MoveBaseGoal goal;
+    double param;
+
+    goal.target_pose.header.frame_id = "map";
+    goal.target_pose.header.stamp = ros::Time::now();
+    n_.getParam("/clase_pos/pasillo/x_position", param);
+    goal.target_pose.pose.position.x = param;
+    n_.getParam("/clase_pos/pasillo/y_position", param);
+    goal.target_pose.pose.position.y = param;
+    goal.target_pose.pose.position.z = 0.0;
+    goal.target_pose.pose.orientation.x = 0.0;
+    goal.target_pose.pose.orientation.y = 0.0;
+    n_.getParam("/clase_pos/pasillo/z_orientation", param);
+    goal.target_pose.pose.orientation.z = param;
+    goal.target_pose.pose.orientation.w = 1.0;
+
+    set_goal(goal);
+
+    ROS_INFO("Move start");
+}
 
 BT::NodeStatus
 GotoArena::on_tick()
 {
-    if (status() == BT::NodeStatus::IDLE)
+    if (counter_++ == 20)
     {
-      ROS_INFO("Going to referee's position");
-    }
-    
-    if (!obstacle_detected_)
-    {
+        move_base_msgs::MoveBaseGoal goal;
         double param;
-        pos_referee_.target_pose.header.frame_id = "map";
-        pos_referee_.target_pose.header.stamp = ros::Time::now();
-        n_.getParam("/clase_pos/referee/x_position", param);
-        pos_referee_.target_pose.pose.position.x = param;
-        n_.getParam("/clase_pos/referee/y_position", param);
-        pos_referee_.target_pose.pose.position.y = param;
-        n_.getParam("/clase_pos/referee/z_orientation", param);
-        pos_referee_.target_pose.pose.orientation.z = param;
-        n_.getParam("/clase_pos/referee/w_orientation", param);
-        pos_referee_.target_pose.pose.orientation.w = param;
-        set_goal(pos_referee_);
+
+        goal.target_pose.header.frame_id = "map";
+        goal.target_pose.header.stamp = ros::Time::now();
+        n_.getParam("/clase_pos/inicial/x_position", param);
+        goal.target_pose.pose.position.x = param;
+        n_.getParam("/clase_pos/inicial/y_position", param);
+        goal.target_pose.pose.position.y = param;
+        goal.target_pose.pose.position.z = 0.0;
+        goal.target_pose.pose.orientation.x = 0.0;
+        goal.target_pose.pose.orientation.y = 0.0;
+        n_.getParam("/clase_pos/inicial/z_orientation", param);
+        goal.target_pose.pose.orientation.z = param;
+        goal.target_pose.pose.orientation.w = 1.0;
+
+        set_goal(goal);
     }
+
     return BT::NodeStatus::RUNNING;
 }
 
