@@ -2,6 +2,7 @@
 #include <carry_my_luggage/CMLDialog.h>
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
+#include "geometry_msgs/Twist.h"
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
@@ -26,12 +27,17 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 {
   found_bag_ = false;
   pixel_counter_ = 0;
+  right_counter_ = 0;
+  left_counter_ = 0;
   sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &DetectBag::DetectBagCallBack, this);
+  pub_vel_ = n_.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 1);
 }
 
 
 void
 DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes) {
+  
+  turn_ts_ = ros::Time::now();
   for (const auto & box : boxes->bounding_boxes) {
     if (box.Class =="person") {
       if (!found_person_){
@@ -43,12 +49,20 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
       py = (box.ymax + box.ymin) / 2;
 
       if (px - px_init > 2){
-        std::cerr << "Izquierda" << std::endl;
+        if (left_counter_ >= 3)
+        {
+          std::cerr << "Izquierda" << std::endl;
+        }
+        left_counter_++;
+        right_counter_ = 0;
         
       }
       else if (px - px_init < -2){
-        std::cerr << "Derecha" << std::endl;
-        
+        if (right_counter_ >= 3){
+          std::cerr << "Derecha" << std::endl;
+        }
+        right_counter_++;
+        left_counter_ = 0;
       }
     }
   }
@@ -63,13 +77,28 @@ DetectBag::halt()
 BT::NodeStatus
 DetectBag::tick()
 {
+  geometry_msgs::Twist cmd;
   //fowarder.step();
+  turn_ts_ = ros::Time::now();
+  if (left_counter_ >= 4) {
+    while ((ros::Time::now() - turn_ts_).toSec() <= 3)
+    {
+      cmd.angular.z = 0.3;
+    }
+  }
+  else if (right_counter_ >= 4) {
+    while ((ros::Time::now() - turn_ts_).toSec() <= 3)
+    {
+      cmd.angular.z = -0.3;
+    }
+  }
+  cmd.angular.z = 0.0;
   if (status() == BT::NodeStatus::IDLE)
   {
     ROS_INFO("Bag");
   }
 
-  return BT::NodeStatus::SUCCESS;
+  return BT::NodeStatus::RUNNING;
 }
 
 }  // namespace carry_my_luggage
