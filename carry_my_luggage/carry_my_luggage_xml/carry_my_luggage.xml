@@ -2,20 +2,18 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-        <Sequence>
-            <Action ID="GotoDoor"/>
+        <SequenceStar>
+            <Action ID="GotoReferee"/>
             <Action ID="DetectBag"/>
             <ReactiveSequence>
                 <Action ID="DetectPerson"/>
-                <Decorator ID="rate_controller" hz="10">
-                    <Action ID="GotoPerson"/>
-                </Decorator>
+                <Action ID="GotoPerson"/>
             </ReactiveSequence>
             <ReactiveFallback>
                 <Action ID="DetectObject"/>
                 <Action ID="GotoArena"/>
             </ReactiveFallback>
-        </Sequence>
+        </SequenceStar>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
@@ -25,9 +23,6 @@
         <Action ID="GotoPerson"/>
         <Action ID="GotoArena"/>
         <Action ID="GotoDoor"/>
-        <Decorator ID="rate_controller">
-            <input_port name="hz"/>
-        </Decorator>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

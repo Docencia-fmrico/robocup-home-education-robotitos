@@ -35,9 +35,15 @@ int main(int argc, char **argv)
     };
 
   factory.registerBuilder<carry_my_luggage::GotoPerson>("GotoPerson", builder);
-  //factory.registerNodeType<carry_my_luggage::GotoPerson>("GotoPerson");
-  //factory.registerNodeType<carry_my_luggage::DetectObject>("DetectObject");
-  //factory.registerNodeType<carry_my_luggage::GotoArena>("GotoArena");
+  factory.registerNodeType<carry_my_luggage::DetectObject>("DetectObject");
+  
+  BT::NodeBuilder builder_1 =
+    [](const std::string & name, const BT::NodeConfiguration & config)
+    {
+      return std::make_unique<carry_my_luggage::GotoArena>(name, "move_base", config);
+    };
+  factory.registerBuilder<carry_my_luggage::GotoArena>("GotoArena", builder_1);
+
   BT::NodeBuilder builder_2 =
     [](const std::string & name, const BT::NodeConfiguration & config)
     {

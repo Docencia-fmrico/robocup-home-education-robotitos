@@ -66,6 +66,12 @@ public:
     nav_need_send_goal_ = true;
   }
 
+  void cancel_goal()
+  {
+    nav_finished_ = true;
+    nav_succeded_ = true;
+  }
+
   BT::NodeStatus tick()
   {
     if (status() == BT::NodeStatus::IDLE)

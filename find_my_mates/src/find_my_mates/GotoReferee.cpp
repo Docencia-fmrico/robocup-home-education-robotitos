@@ -27,10 +27,23 @@ GotoReferee::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedbac
 }
 
 void
-GotoReferee::on_halt() {}
+GotoReferee::on_halt() {
+  cancel_goal();
+}
 
 void
-GotoReferee::on_start() {}
+GotoReferee::on_start() {
+  pos_referee_.target_pose.header.frame_id = "map";
+  pos_referee_.target_pose.header.stamp = ros::Time::now();
+  pos_referee_.target_pose.pose.position.x = 4.994;
+  pos_referee_.target_pose.pose.position.y = -1.018;
+  pos_referee_.target_pose.pose.position.y = 0.0;
+  pos_referee_.target_pose.pose.orientation.x = 0.0;
+  pos_referee_.target_pose.pose.orientation.y = 0.0;
+  pos_referee_.target_pose.pose.orientation.z = -0.527;
+  pos_referee_.target_pose.pose.orientation.w = 1.0;
+  set_goal(pos_referee_);
+}
 
 BT::NodeStatus
 GotoReferee::on_tick()
@@ -39,19 +52,6 @@ GotoReferee::on_tick()
     {
       ROS_INFO("Going to referee's position");
     }
-
-    double param;
-    pos_referee_.target_pose.header.frame_id = "map";
-    pos_referee_.target_pose.header.stamp = ros::Time::now();
-    n_.getParam("/clase_pos/referee/x_position", param);
-    pos_referee_.target_pose.pose.position.x = param;
-    n_.getParam("/clase_pos/referee/y_position", param);
-    pos_referee_.target_pose.pose.position.y = param;
-    n_.getParam("/clase_pos/referee/z_orientation", param);
-    pos_referee_.target_pose.pose.orientation.z = param;
-    n_.getParam("/clase_pos/referee/w_orientation", param);
-    pos_referee_.target_pose.pose.orientation.w = param;
-    set_goal(pos_referee_);
     return BT::NodeStatus::RUNNING;
 }
 

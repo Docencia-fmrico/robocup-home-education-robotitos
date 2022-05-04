@@ -2,15 +2,15 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-
-        <ReactiveSequence>
-            <Action ID="DetectBag"/>
-        </ReactiveSequence>
-
+        <Sequence>
+            <Action ID="GotoPerson"/>
+            <Action ID="DetectPerson"/>
+        </Sequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
-        <Action ID="DetectBag"/>
+        <Action ID="DetectPerson"/>
+        <Action ID="GotoPerson"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

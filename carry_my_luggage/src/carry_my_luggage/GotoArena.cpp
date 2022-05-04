@@ -27,7 +27,9 @@ GotoArena::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 
 
 void
-GotoArena::on_halt() {}
+GotoArena::on_halt() {
+    cancel_goal();
+}
 
 void
 GotoArena::on_start() {

@@ -55,14 +55,13 @@ GotoArena::on_tick()
         double param;
         pos_referee_.target_pose.header.frame_id = "map";
         pos_referee_.target_pose.header.stamp = ros::Time::now();
-        n_.getParam("/clase_pos/person_1/x_position", param);
-        pos_referee_.target_pose.pose.position.x = param;
-        n_.getParam("/clase_pos/person_1/y_position", param);
-        pos_referee_.target_pose.pose.position.y = param;
-        n_.getParam("/clase_pos/person_1/z_orientation", param);
-        pos_referee_.target_pose.pose.orientation.z = param;
-        n_.getParam("/clase_pos/person_1/w_orientation", param);
-        pos_referee_.target_pose.pose.orientation.w = param;
+        pos_referee_.target_pose.pose.position.x = 0.0;
+        pos_referee_.target_pose.pose.position.y = 0.0;
+        pos_referee_.target_pose.pose.position.z = 0.0;
+        pos_referee_.target_pose.pose.orientation.x = 0.0;
+        pos_referee_.target_pose.pose.orientation.y = 0.0;
+        pos_referee_.target_pose.pose.orientation.z = -0.267;
+        pos_referee_.target_pose.pose.orientation.w = 1.0;
         set_goal(pos_referee_);
     }
     return BT::NodeStatus::RUNNING;

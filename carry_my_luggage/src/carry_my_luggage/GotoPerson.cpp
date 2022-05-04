@@ -5,6 +5,9 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include "carry_my_luggage/BTNavAction.h"
 
+#include <darknet_ros_msgs/BoundingBoxes.h>
+#include <darknet_ros_msgs/ObjectCount.h>
+
 #include "tf2/transform_datatypes.h"
 #include "tf2_ros/transform_listener.h"
 #include "tf2/LinearMath/Transform.h"
@@ -26,6 +29,8 @@ GotoPerson::GotoPerson(
   const BT::NodeConfiguration & config)
 : BTNavAction(name, action_name, config), listener(buffer), counter_(0)
 { 
+  direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
+  sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &GotoPerson::GotoPersonCallBack,this);
 }
 
 void
@@ -35,7 +40,26 @@ GotoPerson::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback
 }
 
 void
-GotoPerson::on_halt() {}
+GotoPerson::GotoPersonCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes){
+  ROS_INFO(" callback detectperson");
+  for (const auto & box : boxes->bounding_boxes) {
+    if (box.Class =="person") {
+      px = (box.xmax + box.xmin) / 2;
+    } 
+  }
+}
+
+void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position) {
+  directions.target_pose.pose.orientation.x = position.get()->pose.pose.orientation.x;
+  directions.target_pose.pose.orientation.y = position.get()->pose.pose.orientation.y;
+  directions.target_pose.pose.orientation.z = position.get()->pose.pose.orientation.z;
+  directions.target_pose.pose.orientation.w = position.get()->pose.pose.orientation.w;
+}
+
+void
+GotoPerson::on_halt() {
+  cancel_goal();
+}
 
 void
 GotoPerson::on_start() {}
@@ -74,7 +98,7 @@ GotoPerson::on_tick()
       ROS_ERROR("%s", error.c_str());
     }
 
-    if (buffer.canTransform("odom", "object/0", ros::Time(0), ros::Duration(0.5), &error))
+    if (buffer.canTransform("odom", "object/0", ros::Time(0), ros::Duration(0.6), &error))
     {
       odom2obj_msg = buffer.lookupTransform("odom", "object/0", ros::Time(0));
 
@@ -82,25 +106,36 @@ GotoPerson::on_tick()
     }
     else
     {
+      std::cout << "fuera del alcance" << std::endl;
       ROS_ERROR("%s", error.c_str());
     }
     
+    double dist = bf2obj.getOrigin().length();
     bf2obj = map2bf * bf2odom * odom2obj;
-
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
     goal.target_pose.pose.position.x = bf2obj.getOrigin().x();
     goal.target_pose.pose.position.y = bf2obj.getOrigin().y();
     goal.target_pose.pose.position.z = bf2obj.getOrigin().z();
-    goal.target_pose.pose.orientation.x = 0.0;
-    goal.target_pose.pose.orientation.y = 0.0;
-    goal.target_pose.pose.orientation.z = atan2(bf2obj.getOrigin().y(), bf2obj.getOrigin().x());
-    goal.target_pose.pose.orientation.w = 1.0;
+    goal.target_pose.pose.orientation.x = directions.target_pose.pose.orientation.x;
+    goal.target_pose.pose.orientation.y = directions.target_pose.pose.orientation.y;
+    goal.target_pose.pose.orientation.z = directions.target_pose.pose.orientation.z;
+    goal.target_pose.pose.orientation.w = directions.target_pose.pose.orientation.w;
+
+    /*
+    if (dist > 1) {
+      goal.target_pose.pose.position.x = bf2obj.getOrigin().x();
+      goal.target_pose.pose.position.y = bf2obj.getOrigin().y();
+      goal.target_pose.pose.position.z = bf2obj.getOrigin().z();
+    } else {
+      goal.target_pose.pose.position.x = directions.target_pose.pose.position.x;
+      goal.target_pose.pose.position.y = directions.target_pose.pose.position.y;
+      goal.target_pose.pose.position.z = directions.target_pose.pose.position.z;
+    }*/
 
     set_goal(goal);
-    counter_ =0;
+    counter_ = 0;
   }
-
   return BT::NodeStatus::RUNNING;
 }
 
