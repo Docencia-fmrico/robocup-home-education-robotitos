@@ -53,11 +53,7 @@ DetectBag::tick()
     ROS_INFO("Bag");
   }
 
-  if (found_bag_) {
-    return BT::NodeStatus::SUCCESS;
-  } else {
-    return BT::NodeStatus::FAILURE;
-  }
+  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace carry_my_luggage

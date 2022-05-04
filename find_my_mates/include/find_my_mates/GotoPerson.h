@@ -39,11 +39,13 @@ class GotoPerson : public BTNavAction
       return {};
     }
   private:
-    double person_1 = [-5.05, 2.55, 0.10, 1.0];
-    double person_2 = [-4.65, -3.85, 0.05, 1.0];
-    double person_3 = [-4.65, -4.80, 0.50, 1.0];
-    double person = [person_1, person_2, person_3, person_4, person_5, person_6];
+    double person[6][4] = {{3.326, 6.175, 1.29, 1.0}, {1.345, 6.966, 1.586, 1.0}, {1.074, 5.846, 2.88, 1.0}, {1.218, 4.163, -2.825, 1.0}, {1.65, 3.028, -2.169, 1.0}, {2.822, 2.582, -1.719, 1.0}};
+    bool goal_sent;
     ros::NodeHandle n_;
+
+    ros::Subscriber direction_;
+    move_base_msgs::MoveBaseGoal directions;
+    int count;
 
 };
 

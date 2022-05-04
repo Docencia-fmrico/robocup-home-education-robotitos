@@ -16,7 +16,7 @@ GotoPerson::GotoPerson(
   const std::string& name,
   const std::string & action_name,
   const BT::NodeConfiguration & config)
-: BTNavAction(name, action_name, config), listener(buffer)
+: BTNavAction(name, action_name, config), goal_sent(false), count(1)
 { 
   direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
 }
@@ -40,7 +40,9 @@ void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStampe
 }
 
 void
-GotoPerson::on_halt() {}
+GotoPerson::on_halt() {
+  cancel_goal();
+}
 
 void
 GotoPerson::on_start() {}
@@ -50,24 +52,34 @@ GotoPerson::on_tick()
 {
   if (status() == BT::NodeStatus::IDLE)
   {
-    ROS_INFO("Siguiendo a la persona");
+    ROS_INFO("Yendo donde la persona");
   }
 
-  /*
   move_base_msgs::MoveBaseGoal goal;
   
-  goal.target_pose.header.frame_id = "map";
-  goal.target_pose.header.stamp = ros::Time::now();
-  goal.target_pose.pose.position.x = bf2person.getOrigin().x();
-  goal.target_pose.pose.position.y = bf2person.getOrigin().y();
-  goal.target_pose.pose.position.z = bf2person.getOrigin().z();
-  goal.target_pose.pose.orientation.x = directions.target_pose.pose.orientation.x;
-  goal.target_pose.pose.orientation.y = directions.target_pose.pose.orientation.y;
-  goal.target_pose.pose.orientation.z = directions.target_pose.pose.orientation.z;
-  goal.target_pose.pose.orientation.w = directions.target_pose.pose.orientation.w;
+  if (count < 6) {
+    if (!goal_sent) {
+      goal.target_pose.header.frame_id = "map";
+      goal.target_pose.header.stamp = ros::Time::now();
+      goal.target_pose.pose.position.x = person[count][0];
+      goal.target_pose.pose.position.y = person[count][1];
+      goal.target_pose.pose.position.z = 0;
+      goal.target_pose.pose.orientation.x = 0;
+      goal.target_pose.pose.orientation.y = 0;
+      goal.target_pose.pose.orientation.z = person[count][2];
+      goal.target_pose.pose.orientation.w = person[count][3];
+      std::cout <<"x: " << person[count][0] << ", y: " << person[count][1] << ", z: " << person[count][2] << std::endl;
 
-  set_goal(goal);
-  */
+      set_goal(goal);
+      goal_sent = true;
+    } else if ((person[count][0] - directions.target_pose.pose.position.x < 0.1) && 
+              (person[count][1] - directions.target_pose.pose.position.y < 0.1) &&
+              (person[count][2]- directions.target_pose.pose.orientation.z < 0.1)) {
+                cancel_goal();
+                count++;
+                goal_sent = false;
+              }
+  }
   return BT::NodeStatus::RUNNING;
 }
 
