@@ -89,7 +89,7 @@ Dialog::noIntentCB(dialogflow_ros_msgs::DialogflowResult result)
 void 
 Dialog::welcomeIntentCB(dialogflow_ros_msgs::DialogflowResult result)
 {
-  ROS_INFO("[------------------Dialog] welcomeIntentCB: intent [%s]", result.intent.c_str());
+  ROS_INFO("[Dialog] welcomeIntentCB: intent [%s]", result.intent.c_str());
   speak(result.fulfillment_text);
 }
 

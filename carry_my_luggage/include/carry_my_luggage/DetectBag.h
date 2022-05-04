@@ -10,6 +10,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <std_msgs/Float32.h>
+#include <carry_my_luggage/CMLDialog.h>
 
 #include <string>
 
@@ -32,34 +33,14 @@ class DetectBag : public BT::ActionNodeBase
     }
 
   private:
-    bool found_bag_;
+    bool found_person_;
     int pixel_counter_;
+    int px_init, py_init;
+    int px, py;
     ros::NodeHandle n_;
     ros::Subscriber sub_hsv_;
+    carry_my_luggage::Dialog fowarder;
 };
-
-/*class Dialog : public DialogInterface
-{
-  public: 
-    Dialog();
-    std::string getContext(dialogflow_ros_msgs::DialogflowResult result);
-    std::string getIntent(dialogflow_ros_msgs::DialogflowResult result);
-    void noIntentCB(dialogflow_ros_msgs::DialogflowResult result);
-    void welcomeIntentCB(dialogflow_ros_msgs::DialogflowResult result);
-    void detectBagIntentCB(dialogflow_ros_msgs::DialogflowResult result);
-    void chooseBagIntentCB(dialogflow_ros_msgs::DialogflowResult result);
-
-  private:
-    int state_;
-    std::string context_;
-    std::string intent_;
-    static const int IDLE = 0;
-    static const int SPEAK = 1;
-    static const int LISTEN = 2;
-    ros::Time speak_ts_;
-
-};*/
-
 }  // namespace carry_my_luggage
 
 #endif  // CARRY_MY_LUGGAGE_DETECTBAG_H
