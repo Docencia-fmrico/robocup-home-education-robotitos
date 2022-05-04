@@ -10,6 +10,8 @@
 #include <std_msgs/Float32.h>
 #include <darknet_ros_msgs/BoundingBoxes.h>
 #include <darknet_ros_msgs/ObjectCount.h>
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
 
 #include "ros/ros.h"
 #include <string>
@@ -24,12 +26,12 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 {
   found_bag_ = false;
   pixel_counter_ = 0;
-  sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &DetectPerson::DetectBagCallBack,this);
+  sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &DetectBag::DetectBagCallBack, this);
 }
 
 
 void
-DetectBag::DetectBagCallBack(const sensor_msgs::Image::ConstPtr& image) {
+DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes) {
   for (const auto & box : boxes->bounding_boxes) {
     if (box.Class =="person") {
       if (!found_person_){
@@ -39,6 +41,10 @@ DetectBag::DetectBagCallBack(const sensor_msgs::Image::ConstPtr& image) {
       }
       px = (box.xmax + box.xmin) / 2;
       py = (box.ymax + box.ymin) / 2;
+
+      if (px_init < px){
+        std::cerr << "hola" << std::endl;
+      }
     }
   }
 }
