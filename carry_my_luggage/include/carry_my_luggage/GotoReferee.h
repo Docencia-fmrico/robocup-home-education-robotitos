@@ -37,6 +37,7 @@ class GotoReferee : public BTNavAction
     ros::Subscriber sub_laser_;
     move_base_msgs::MoveBaseGoal pos_referee_;
     bool obstacle_detected_;
+    bool goal_sent;
     double dist_;
 };
 

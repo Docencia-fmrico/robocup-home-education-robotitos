@@ -76,8 +76,8 @@ DetectObject::laserCallBack(const sensor_msgs::LaserScan::ConstPtr& laser)
 BT::NodeStatus
 DetectObject::tick()
 {
+  /*
   if (obstacle_detected_ == true) {
-/*
     if (dist >= 1.4) {
       setOutput("foward_velocity", std::to_string(foward_velocity));
     } else if (dist <= 1.0) {
@@ -94,11 +94,11 @@ DetectObject::tick()
     } else {
       setOutput("turn_velocity", "0.0");
     }
-    */
     return BT::NodeStatus::SUCCESS;
   } else {
     return BT::NodeStatus::FAILURE;
-  }
+  }*/
+  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace carry_my_luggage

@@ -19,6 +19,7 @@ GotoReferee::GotoReferee(
 {
     sub_laser_ = n_.subscribe("/scan",1,&GotoReferee::GotoRefereeCallBack,this);
     obstacle_detected_ = true;
+    goal_sent = false;
 }
 
 void
@@ -50,20 +51,19 @@ GotoReferee::on_tick()
       ROS_INFO("Going to referee's position");
     }
     
-    if (!obstacle_detected_)
+    if ((!obstacle_detected_) && (!goal_sent))
     {
-        double param;
         pos_referee_.target_pose.header.frame_id = "map";
         pos_referee_.target_pose.header.stamp = ros::Time::now();
-        n_.getParam("/clase_pos/referee/x_position", param);
-        pos_referee_.target_pose.pose.position.x = param;
-        n_.getParam("/clase_pos/referee/y_position", param);
-        pos_referee_.target_pose.pose.position.y = param;
-        n_.getParam("/clase_pos/referee/z_orientation", param);
-        pos_referee_.target_pose.pose.orientation.z = param;
-        n_.getParam("/clase_pos/referee/w_orientation", param);
-        pos_referee_.target_pose.pose.orientation.w = param;
+        pos_referee_.target_pose.pose.position.x = -1.80;
+        pos_referee_.target_pose.pose.position.y = -4.70;
+        pos_referee_.target_pose.pose.position.z = 0.0;
+        pos_referee_.target_pose.pose.orientation.x = 0.0;
+        pos_referee_.target_pose.pose.orientation.y = 0.0;
+        pos_referee_.target_pose.pose.orientation.z = 0.89;
+        pos_referee_.target_pose.pose.orientation.w = 0.44;
         set_goal(pos_referee_);
+        goal_sent = true;
     }
     return BT::NodeStatus::RUNNING;
 }

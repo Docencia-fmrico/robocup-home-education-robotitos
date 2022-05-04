@@ -6,6 +6,9 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include "carry_my_luggage/BTNavAction.h"
 
+#include <darknet_ros_msgs/BoundingBoxes.h>
+#include <darknet_ros_msgs/ObjectCount.h>
+
 #include <tf/transform_broadcaster.h>
 #include <tf/message_filter.h>
 #include "tf2/transform_datatypes.h"
@@ -34,16 +37,18 @@ class GotoPerson : public BTNavAction
     void on_start() override;
     void on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) override;
     void DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position);
+    void GotoPersonCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes);
 
     static BT::PortsList providedPorts() {
       return {};
     }
   private:
     ros::NodeHandle n_;
+    ros::Subscriber direction_;
+    ros::Subscriber sub_darknet_ ;
 
     tf2_ros::Buffer buffer;
     tf2_ros::TransformListener listener;
-    ros::Subscriber direction_;
     move_base_msgs::MoveBaseGoal directions;
 
     geometry_msgs::TransformStamped bf2odom_msg;
@@ -55,7 +60,7 @@ class GotoPerson : public BTNavAction
     tf2::Transform bf2obj;
     std::string error;
 
-    int counter_;
+    int counter_, px;
 };
 
 }  // namespace carry_my_luggage
