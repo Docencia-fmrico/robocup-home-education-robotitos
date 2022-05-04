@@ -23,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
   actionlib_msgs
   move_base_msgs
+  gb_dialog
 )
 
 catkin_package(
@@ -44,6 +45,7 @@ CATKIN_DEPENDS
   message_filters
   actionlib_msgs 
   move_base_msgs
+  gb_dialog
 )
 
 find_package(OpenCV REQUIRED)

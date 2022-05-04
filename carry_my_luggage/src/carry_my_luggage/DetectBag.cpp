@@ -1,4 +1,5 @@
-#include "carry_my_luggage/DetectBag.h"
+#include <carry_my_luggage/DetectBag.h>
+#include <carry_my_luggage/CMLDialog.h>
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include <image_transport/image_transport.h>
@@ -7,6 +8,10 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <std_msgs/Float32.h>
+#include <darknet_ros_msgs/BoundingBoxes.h>
+#include <darknet_ros_msgs/ObjectCount.h>
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
 
 #include "ros/ros.h"
 #include <string>
@@ -21,22 +26,32 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 {
   found_bag_ = false;
   pixel_counter_ = 0;
-  sub_hsv_ = n_.subscribe("/hsv/image_filtered",1,&DetectBag::DetectBagCallBack,this);
+  sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &DetectBag::DetectBagCallBack, this);
 }
 
+
 void
-DetectBag::DetectBagCallBack(const sensor_msgs::Image::ConstPtr& image) {
- for (const auto & pixel_value : image->data) {
-     if (pixel_value != 0) {
-        pixel_counter_++;
-     } 
+DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes) {
+  for (const auto & box : boxes->bounding_boxes) {
+    if (box.Class =="person") {
+      if (!found_person_){
+        found_person_ = true;
+        px_init = (box.xmax + box.xmin) / 2;
+        py_init = (box.ymax + box.ymin) / 2;
+      }
+      px = (box.xmax + box.xmin) / 2;
+      py = (box.ymax + box.ymin) / 2;
+
+      if (px - px_init > 2){
+        std::cerr << "Izquierda" << std::endl;
+        
+      }
+      else if (px - px_init < -2){
+        std::cerr << "Derecha" << std::endl;
+        
+      }
+    }
   }
-  if (pixel_counter_ >= PIXEL_REQ) {
-    found_bag_ = true;
-  } else {
-    found_bag_ = false;
-  }
-  pixel_counter_ = 0;
 }
 
 void
@@ -48,6 +63,7 @@ DetectBag::halt()
 BT::NodeStatus
 DetectBag::tick()
 {
+  //fowarder.step();
   if (status() == BT::NodeStatus::IDLE)
   {
     ROS_INFO("Bag");
