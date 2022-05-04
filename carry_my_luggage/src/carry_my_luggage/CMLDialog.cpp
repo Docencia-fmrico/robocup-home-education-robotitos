@@ -36,7 +36,7 @@
 
 /* Mantainer: Jaime Avilleira j.avilleira.2019@alumnos.urjc.es*/
 #include <gb_dialog/DialogInterface.h>
-#include "carry_my_luggage/CMLDialog.h"
+#include <carry_my_luggage/CMLDialog.h>
 #include <string>
 #include <iostream>
 
@@ -140,16 +140,3 @@ Dialog::step()
 
 
 } //namespace robocup_dialog
-
-/*int main(int argc, char** argv)
-{
-  ros::init(argc, argv, "robocup_dialog_node");
-  gb_dialog::Dialog forwarder;
-  ros::Rate loop_rate(20);
-  while (ros::ok()){
-      forwarder.step();
-      ros::spinOnce();
-      loop_rate.sleep();
-  }
-  return 0;
-}*/

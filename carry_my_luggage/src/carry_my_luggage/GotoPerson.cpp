@@ -58,7 +58,6 @@ void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStampe
 
 void
 GotoPerson::on_halt() {
-  cancel_goal();
 }
 
 void

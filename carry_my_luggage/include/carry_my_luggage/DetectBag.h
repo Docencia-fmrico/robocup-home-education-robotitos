@@ -41,11 +41,13 @@ class DetectBag : public BT::ActionNodeBase
 
     bool found_person_;
     bool found_bag_;
-    int pixel_counter_;
+    int pixel_counter_, right_counter_, left_counter_;
     int px_init, py_init;
     int px, py;
     ros::NodeHandle n_;
+    ros::Publisher pub_vel_;
     ros::Subscriber sub_darknet_;
+    ros::Time turn_ts_;
     carry_my_luggage::Dialog fowarder;
 };
 }  // namespace carry_my_luggage

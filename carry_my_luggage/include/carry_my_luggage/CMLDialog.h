@@ -13,7 +13,8 @@ namespace carry_my_luggage
 class Dialog : public gb_dialog::DialogInterface
 {
     public:
-        explicit Dialog();
+        Dialog();
+        std::string intent_;
         std::string getContext(dialogflow_ros_msgs::DialogflowResult result);
         std::string getIntent(dialogflow_ros_msgs::DialogflowResult result);
         void noIntentCB(dialogflow_ros_msgs::DialogflowResult result);
@@ -24,7 +25,6 @@ class Dialog : public gb_dialog::DialogInterface
     private:
         int state_;
         std::string context_;
-        std::string intent_;
         static const int IDLE = 0;
         static const int SPEAK = 1;
         static const int LISTEN = 2;
