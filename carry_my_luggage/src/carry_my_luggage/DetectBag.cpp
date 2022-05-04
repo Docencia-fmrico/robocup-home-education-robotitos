@@ -42,8 +42,13 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
       px = (box.xmax + box.xmin) / 2;
       py = (box.ymax + box.ymin) / 2;
 
-      if (px_init < px){
-        std::cerr << "hola" << std::endl;
+      if (px - px_init > 2){
+        std::cerr << "Izquierda" << std::endl;
+        
+      }
+      else if (px - px_init < -2){
+        std::cerr << "Derecha" << std::endl;
+        
       }
     }
   }
@@ -58,7 +63,7 @@ DetectBag::halt()
 BT::NodeStatus
 DetectBag::tick()
 {
-  fowarder.step();
+  //fowarder.step();
   if (status() == BT::NodeStatus::IDLE)
   {
     ROS_INFO("Bag");
