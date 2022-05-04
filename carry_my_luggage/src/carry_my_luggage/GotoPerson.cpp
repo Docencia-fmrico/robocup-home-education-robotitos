@@ -98,7 +98,7 @@ GotoPerson::on_tick()
       ROS_ERROR("%s", error.c_str());
     }
 
-    if (buffer.canTransform("odom", "object/0", ros::Time(0), ros::Duration(0.5), &error))
+    if (buffer.canTransform("odom", "object/0", ros::Time(0), ros::Duration(0.6), &error))
     {
       odom2obj_msg = buffer.lookupTransform("odom", "object/0", ros::Time(0));
 
@@ -114,11 +114,15 @@ GotoPerson::on_tick()
     bf2obj = map2bf * bf2odom * odom2obj;
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
+    goal.target_pose.pose.position.x = bf2obj.getOrigin().x();
+    goal.target_pose.pose.position.y = bf2obj.getOrigin().y();
+    goal.target_pose.pose.position.z = bf2obj.getOrigin().z();
     goal.target_pose.pose.orientation.x = directions.target_pose.pose.orientation.x;
     goal.target_pose.pose.orientation.y = directions.target_pose.pose.orientation.y;
     goal.target_pose.pose.orientation.z = directions.target_pose.pose.orientation.z;
     goal.target_pose.pose.orientation.w = directions.target_pose.pose.orientation.w;
 
+    /*
     if (dist > 1) {
       goal.target_pose.pose.position.x = bf2obj.getOrigin().x();
       goal.target_pose.pose.position.y = bf2obj.getOrigin().y();
@@ -127,7 +131,7 @@ GotoPerson::on_tick()
       goal.target_pose.pose.position.x = directions.target_pose.pose.position.x;
       goal.target_pose.pose.position.y = directions.target_pose.pose.position.y;
       goal.target_pose.pose.position.z = directions.target_pose.pose.position.z;
-    }
+    }*/
 
     set_goal(goal);
     counter_ = 0;
