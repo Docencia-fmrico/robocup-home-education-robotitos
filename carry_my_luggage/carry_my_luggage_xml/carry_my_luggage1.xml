@@ -3,14 +3,12 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
-            <Action ID="DetectPerson"/>
-            <Action ID="GotoPerson"/>
+            <Action ID="DetectBag"/>
         </ReactiveSequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
-        <Action ID="DetectPerson"/>
-        <Action ID="GotoPerson"/>
+        <Action ID="DetectBag"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>
