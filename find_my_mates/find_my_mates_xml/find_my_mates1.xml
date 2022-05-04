@@ -4,6 +4,7 @@
     <BehaviorTree ID="BehaviorTree">
         <Sequence>
             <Action ID="GotoPerson"/>
+            <Action ID="DetectPerson"/>
         </Sequence>
     </BehaviorTree>
     <!-- ////////// -->

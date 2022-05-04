@@ -38,7 +38,9 @@ void GotoReferee::GotoRefereeCallBack(const sensor_msgs::LaserScan::ConstPtr& la
 }
 
 void
-GotoReferee::on_halt() {}
+GotoReferee::on_halt() {
+    cancel_goal();
+}
 
 void
 GotoReferee::on_start() {}

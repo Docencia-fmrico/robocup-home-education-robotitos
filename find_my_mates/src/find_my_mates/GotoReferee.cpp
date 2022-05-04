@@ -27,7 +27,9 @@ GotoReferee::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedbac
 }
 
 void
-GotoReferee::on_halt() {}
+GotoReferee::on_halt() {
+  cancel_goal();
+}
 
 void
 GotoReferee::on_start() {}
