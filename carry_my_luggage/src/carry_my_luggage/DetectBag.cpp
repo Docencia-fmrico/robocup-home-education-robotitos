@@ -27,9 +27,11 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 : BT::ActionNodeBase(name, {})
 {
   found_bag_ = false;
+  turning_done = false;
   pixel_counter_ = 0;
   right_counter_ = 0;
   left_counter_ = 0;
+  state_ = IDLE;
   sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &DetectBag::DetectBagCallBack, this);
   pub_vel_ = n_.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 1);
 }
@@ -61,7 +63,6 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
       else if (px - px_init < -4){
         if (right_counter_ >= 3){
           std::cerr << "Derecha" << std::endl;
-          turn_ts_ = ros::Time::now();
         }
         right_counter_++;
         left_counter_ = 0;
@@ -98,32 +99,35 @@ DetectBag::tick()
           turn_ts_ = ros::Time::now();
           state_ = TURN;
           break;
+        } else if (turning_done) {
+          right_counter_ = 0;
+          left_counter_ = 0;
         }
         state_ = LISTEN;
         break;
       case TURN:
         if (right_counter_ >= 3) {
-          if ((ros::Time::now() - turn_ts_).toSec() >= 3) {
-            cmd.angular.z = -0.3;
+          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
+            cmd.angular.z = -0.5;
+          } else {
+            turning_done = true;
+            state_ = LISTEN;
           }
-          else {
-            cmd.angular.z = 0.0;
+        } else if (left_counter_ >= 3) {
+          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
+            cmd.angular.z = 0.5;
+          } else {
+            turning_done = true;
+            state_ = LISTEN;
           }
+        } else {
+          state_ = LISTEN;
         }
-        if (left_counter_ >= 3) {
-          if ((ros::Time::now() - turn_ts_).toSec() >= 3) {
-            cmd.angular.z = 0.3;
-          }
-          else {
-            cmd.angular.z = 0.0;
-          }
-        }
-        pub_vel_.publish(cmd);
-        state_ = LISTEN;
         break;
       case LISTEN:
         //fowarder.listen();
         //speak_ts_ = ros::Time::now();
+        cmd.angular.z = 0.0;
         state_ = SPEAK;
         break;
       case SPEAK:
@@ -133,30 +137,7 @@ DetectBag::tick()
         //}
         break;
     }
-  
-  /*if (left_counter_ >= 4) {
-    while ((ros::Time::now() - turn_ts_).toSec() <= 3)
-    {
-      std::cerr << "ESTOY AQUI IZQUIERDAA" << std::endl;
-      cmd.angular.z = 0.3;
-      pub_vel_.publish(cmd);
-    }
-  }
-  else if (right_counter_ >= 4) {
-    while ((ros::Time::now() - turn_ts_).toSec() <= 3)
-    {
-      std::cerr << (ros::Time::now() -turn_ts_).toSec() << std::endl;
-      std::cerr << "ESTOY AQUI DERECHA" << std::endl;
-      cmd.angular.z = -0.3;
-      pub_vel_.publish(cmd);
-    }
-  }
-  cmd.angular.z = 0.0;
-  pub_vel_.publish(cmd);
-  if (status() == BT::NodeStatus::IDLE)
-  {
-    ROS_INFO("Bag");
-  }*/
+    pub_vel_.publish(cmd);
 
   return BT::NodeStatus::SUCCESS;
 }

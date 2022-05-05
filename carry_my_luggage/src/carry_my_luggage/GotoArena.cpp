@@ -27,26 +27,20 @@ GotoArena::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 
 
 void
-GotoArena::on_halt() {
-    cancel_goal();
-}
+GotoArena::on_halt() {}
 
 void
 GotoArena::on_start() {
     move_base_msgs::MoveBaseGoal goal;
-    double param;
 
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
-    n_.getParam("/clase_pos/pasillo/x_position", param);
-    goal.target_pose.pose.position.x = param;
-    n_.getParam("/clase_pos/pasillo/y_position", param);
-    goal.target_pose.pose.position.y = param;
+    goal.target_pose.pose.position.x = 0.0;
+    goal.target_pose.pose.position.y = 0.0;
     goal.target_pose.pose.position.z = 0.0;
     goal.target_pose.pose.orientation.x = 0.0;
     goal.target_pose.pose.orientation.y = 0.0;
-    n_.getParam("/clase_pos/pasillo/z_orientation", param);
-    goal.target_pose.pose.orientation.z = param;
+    goal.target_pose.pose.orientation.z = 0.0;
     goal.target_pose.pose.orientation.w = 1.0;
 
     set_goal(goal);
@@ -60,19 +54,15 @@ GotoArena::on_tick()
     if (counter_++ == 20)
     {
         move_base_msgs::MoveBaseGoal goal;
-        double param;
 
         goal.target_pose.header.frame_id = "map";
         goal.target_pose.header.stamp = ros::Time::now();
-        n_.getParam("/clase_pos/inicial/x_position", param);
-        goal.target_pose.pose.position.x = param;
-        n_.getParam("/clase_pos/inicial/y_position", param);
-        goal.target_pose.pose.position.y = param;
+        goal.target_pose.pose.position.x = 0.0;
+        goal.target_pose.pose.position.y = 0.0;
         goal.target_pose.pose.position.z = 0.0;
         goal.target_pose.pose.orientation.x = 0.0;
         goal.target_pose.pose.orientation.y = 0.0;
-        n_.getParam("/clase_pos/inicial/z_orientation", param);
-        goal.target_pose.pose.orientation.z = param;
+        goal.target_pose.pose.orientation.z = 0.0;
         goal.target_pose.pose.orientation.w = 1.0;
 
         set_goal(goal);
