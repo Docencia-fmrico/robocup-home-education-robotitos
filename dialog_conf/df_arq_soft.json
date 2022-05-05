@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "carry-my-luggage",
+  "private_key_id": "b093bc4b6a8c80de7df2ad9c57a29345094ff5ee",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoHmCFiPjy3CGP\normnYSWH0k4d1+tXC27d01WMXdtIFUKv+oqgiZ9vWM+yl7Ajm4wiglO9QRXPzDdZ\nzKSkyYVJKqgfpoNmS23mruuSbNhTWRpYelTMP/hGkdl1NUUEUhjK5tSa7kcgbmdS\nmKXR4rLU6xFaKz1WOg+zfy0JnEM8zgxLsJs0aR8HbhHOHnMgttgsPNgf8wIM1cm8\na/QKhGV6HEtBknGgA/yPBoa+Vuf/P9fNIXa9v2nKi/F9hj73A7jS+QrXCzUaNbZv\nng9xPTfWOXyvShbjrVFdxXpw4nnERhyDrfYbj71FVa8aOxUOJyvhhIId6e1BKB7X\nnhSFW055AgMBAAECggEACPPJJwM4DSf8tNsw8Kv4etGPmFY8Rsp/O6+6a/rpfN6o\n9O8DUnDRp8ppEPUJNkmHqPobVHDH+mSWWUv6Q84kBf/lVlN1xszjIXgUvPDahMxc\ns0kcWoiuLgUr47++Q5si4oHFNiopvnKH7PrfmvFr8sZBCnX9UlSi1meXcd4Q1IbR\nl58nlIQm92fb8ynGFLLC9dsOfr87xNr+AiKpSasiA6BW8j+P/YE1NJO4wgPMlium\nbcco2JXPlUvsXLnxILjMxFCwfSqxy9hRDwxwb8uVk/4OroU03CDvfZ8h4taOwQ4O\nK/ZqVJJD+HJFec8reAlAe9Qvtl6Zlkev8dM9koatCQKBgQDPrwEE+FS/+8h/FR42\n8jJ4822OTFvDqsax6EfFfRQp/9x1gApDY5QjO/OyKhSq46RJGhT3/yThp1y1UPFv\nZnZ7WdFQ2E+Hm8Z/+EZbIalF4YF0FDY28YzWxhNYRgBf5Ni2Rt0h2OrESnHxEMc6\nf1LMTosThznK2RopRbBptKy9lQKBgQDPOwGuiiZhpTfOe03s8nZcj236/tqh1b8e\n4szSECodd9n/1/dMH6q2wMIdQey8I1qRqdLtEO8l0gQESldsLgccEDwlZhDiItdc\nXUoGR/jIPDgApBWL2vYeifT/MO1ON1iffZUoNHesFmR/++6hlPmsYlOuZFfK5tFj\nL/XOF4/sVQKBgEKwyt4CtIxV2QNeD67LRYPrf5HDWXBSxa1ZjrqPOMtn2y5sKF+N\neYN6+/2JX8ukgBvtYTBl4T0JFk8vJ+iC+acQp5OTcq50SmDLpCQdghLroDtbRjGM\njZJmVs3w5Kvme+TEirwUwQa5dS9ZGPDi8/6hdi2WLevCnZEFTOoU16elAoGBAJlH\noO/UGZ2iEkw1IieAFBJUuNmthlOsAWi8AxnhgPU5AFNgD/gLeD8jBrGTYKKsV8Jk\nZbKaEvnbhMMTpeRLi1CzpXlYLGbHtJoKGsXYmGirOhUnSRSgSem+yyuyqeRvxap6\nvkf1vwrXqVCNLS3xPlfGhvT4HYPkBL6j6+GbxgXdAoGAK1q9MYuiwx9Jb8kkOLeA\ntlXoRSSsv9q1FgTnzP+gJygo/UexlCiLMJE8mdWFo2EBiLjN5G/gz5Vs6ZD9A5JJ\nUtH+5T5k3ZUoHrgrtEf9tIkxxjtOB/ddJyt/kqOf5KG2yOvCpLBc7m8a/1QviKiR\nTVGuu6ZnZsvXlnCojGGMsNg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "carry-my-luggage@carry-my-luggage.iam.gserviceaccount.com",
+  "client_id": "104649723066417453770",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/carry-my-luggage%40carry-my-luggage.iam.gserviceaccount.com"
+}
