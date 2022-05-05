@@ -25,8 +25,9 @@ class Dialog : public gb_dialog::DialogInterface
         void personObjectCB(dialogflow_ros_msgs::DialogflowResult result);
         void step();
     private:
-        int state_;
+        int state_ = 0;
         int person_cnt_ = 1;
+        int cnt_aux_ = 0;
         std::string context_;
         static const int IDLE = 0;
         static const int SPEAK = 1;

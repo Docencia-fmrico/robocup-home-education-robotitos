@@ -138,6 +138,11 @@ Dialog::step()
             state_ = SPEAK;
             break;
         case SPEAK:
+            if (person_cnt_ != cnt_aux_)
+            {
+              speak("Hi, what is your name?");
+              cnt_aux_ = person_cnt_;
+            }
             if ((ros::Time::now() - speak_ts_).toSec() >= 3)
             {
                 state_ = IDLE;
