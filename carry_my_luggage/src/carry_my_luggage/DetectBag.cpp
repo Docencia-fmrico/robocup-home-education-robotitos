@@ -89,82 +89,82 @@ DetectBag::tick()
   switch (state_)
     {
       case IDLE:
-        std::cerr << "entro aqui" << std::endl;
         if (fowarder.intent_ == "Default Fallback Intent")
         {
           state_ = LISTEN;
           break;
         }
-        if (right_counter_ >= 3){
+        if ((right_counter_ >= 3) && ( fowarder.intent_ == "DetectBag")){
+          
           turn_ts_ = ros::Time::now();
           state_ = TURN;
           break;
         }
-        else if (left_counter_ >= 3){
+        else if ((left_counter_ >= 3) && ( fowarder.intent_ == "DetectBag")){
           turn_ts_ = ros::Time::now();
           state_ = TURN;
+          break;
+        }
+        else if (fowarder.intent_ == "GO")
+        {
+          std::cerr << "LETSGO" << std::endl;
+          return BT::NodeStatus::SUCCESS;
           break;
         }
         state_ = LISTEN;
         break;
       case TURN:
-        
-        std::cerr << ros::Time::now() - turn_ts_ << std::endl;
+        std::cerr << "TIEMPO" << (ros::Time::now() - turn_ts_).toSec() << std::endl;
         if (right_counter_ > 3) {
-          std::cerr << right_counter_ << std::endl;
-          std::cerr << "entro TuRN" << std::endl;
-          if ((ros::Time::now() -turn_ts_).toSec() < 3){
-            
-            cmd.angular.z = 0.5;
+          if ((ros::Time::now() -turn_ts_).toSec() < 1){
+            turning_done = true;
+            cmd.angular.z = 0.3;
           }
           else {
+            speak_ts_ = ros::Time::now();
             turning_done = true;
             cmd.angular.z = 0;
+            fowarder.intent_ = "GO";
+            state_ = SPEAK;
+          }
+        }
+        else if (left_counter_ > 3) {
+          if ((ros::Time::now() -turn_ts_).toSec() < 3){
+            cmd.angular.z = -0.3;
+            turning_done = true;
+
+          }
+          else {
+            speak_ts_ = ros::Time::now();
+            turning_done = true;
+            cmd.angular.z = 0;
+            fowarder.intent_ = "GO";
+            state_ = SPEAK;
           }
         }
         pub_vel_.publish(cmd);
-
-       /* if (right_counter_ >= 3) {
-          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
-            cmd.angular.z = 0.5;
-          } else {
-            std::cerr << "GIRADO DERECHA" << std::endl;
-            turning_done = true;
-            cmd.angular.z = 0.0;
-            state_ = LISTEN;
-          }
-        } else if (left_counter_ >= 3) {
-          std::cerr << ros::Time::now() - turn_ts_ << std::endl;
-          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
-            cmd.angular.z = -0.5;
-          } else {
-            std::cerr << "GIRADO IZQUIERDA" << std::endl;
-            turning_done = true;
-            cmd.angular.z = 0.0;
-            state_ = LISTEN;
-          }
-        } else {
-          std::cerr << "Me salgo" << std::endl;
-          state_ = LISTEN;
-        }*/
+        std::cerr << "Estoy AQUI" << std::endl;
         break;
       case LISTEN:
-        //fowarder.listen();
-        //speak_ts_ = ros::Time::now();
+        if ( fowarder.intent_ == "DetectBag") {
+          std::cerr << "hola" << std::endl;
+          state_ = IDLE;
+          break;
+        }
+        fowarder.listen();
+
+        speak_ts_ = ros::Time::now();
         cmd.angular.z = 0.0;
         state_ = SPEAK;
         break;
       case SPEAK:
-        //if ((ros::Time::now() - speak_ts_).toSec() >= 3)
-        //{
-        std::cerr << "entro SPEAK" << std::endl;
+        if ((ros::Time::now() - speak_ts_).toSec() >= 3)
+        {
         state_ = IDLE;
-        //}
+        }
         break;
     }
     
-    
-
   return BT::NodeStatus::SUCCESS;
 }
 
