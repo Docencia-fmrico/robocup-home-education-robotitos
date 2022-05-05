@@ -148,7 +148,7 @@ DetectBag::tick()
       case LISTEN:
         if ( fowarder.intent_ == "DetectBag") {
           std::cerr << "hola" << std::endl;
-          
+
           state_ = IDLE;
           break;
         }
@@ -165,8 +165,8 @@ DetectBag::tick()
         }
         break;
     }
+    return BT::NodeStatus::RUNNING;
     
-  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace carry_my_luggage

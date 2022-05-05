@@ -74,7 +74,7 @@ GotoPerson::on_tick()
     } else if ((person[count][0] == directions.target_pose.pose.position.x) && 
               (person[count][1] == directions.target_pose.pose.position.y) &&
               (person[count][2] == directions.target_pose.pose.orientation.z)) {
-                cancel_goal();
+              
                 count++;
                 goal_sent = false;
               }

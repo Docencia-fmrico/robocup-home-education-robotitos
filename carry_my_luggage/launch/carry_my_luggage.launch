@@ -1,6 +1,7 @@
 <launch>
-    <node name="$(arg name)" pkg="cameras_cpp" type="nodo_rgbd_filter" output="screen"> </node>
+    <include file="$(find robots)/launch/kobuki_rplidar.launch" />
+    <include file="$(find openni2_launch)/launch/openni2.launch"/>
     <include file="$(find navigation)/launch/navigation.launch" />
     <include file="$(find darknet_ros)/launch/darknet_ros.launch"/>
-    <rosparam command="load" file="$(find carry_my_luggage)/param/clase_pos.yaml"/>
+    <include file="$(find gb_dialog)/launch/gb_dialog_services_soundplay.launch"/>
 </launch> 
