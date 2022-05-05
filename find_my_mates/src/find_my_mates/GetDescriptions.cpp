@@ -142,6 +142,7 @@ Dialog::step()
             {
               speak("Hi, what is your name?");
               cnt_aux_ = person_cnt_;
+              ROS_INFO("[QUESTION] What is your name?");
             }
             if ((ros::Time::now() - speak_ts_).toSec() >= 3)
             {
