@@ -14,9 +14,7 @@ class Dialog : public gb_dialog::DialogInterface
     public:
         Dialog();
         std::string intent_;
-        std::string person1[3];
-        std::string person2[3];
-        std::string person3[3];
+        std::string person[3];
         std::string getContext(dialogflow_ros_msgs::DialogflowResult result);
         std::string getIntent(dialogflow_ros_msgs::DialogflowResult result);
         void noIntentCB(dialogflow_ros_msgs::DialogflowResult result);
