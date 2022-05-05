@@ -23,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
   actionlib_msgs
   move_base_msgs
+  gb_dialog
 )
 
 catkin_package(
@@ -44,6 +45,7 @@ CATKIN_DEPENDS
   message_filters
   actionlib_msgs 
   move_base_msgs
+  gb_dialog
 )
 
 find_package(OpenCV REQUIRED)
@@ -68,6 +70,7 @@ add_library(${PROJECT_NAME}
   src/carry_my_luggage/DetectPerson.cpp
   src/carry_my_luggage/GotoPerson.cpp
   src/carry_my_luggage/transforms.cpp
+  src/carry_my_luggage/CMLDialog.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
@@ -91,6 +94,8 @@ set(ROSLINT_CPP_OPTS "--filter=-runtime/printf")
 roslint_cpp(
   src/carry_my_luggage_node.cpp
   src/carry_my_luggage/DetectBag.cpp
+  include/carry_my_luggage/CMLDialog.h
+  src/carry_my_luggage/CMLDialog.cpp
   include/carry_my_luggage/DetectBag.h
   src/carry_my_luggage/DetectObject.cpp
   include/carry_my_luggage/DetectObject.h
