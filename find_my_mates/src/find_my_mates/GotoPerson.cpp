@@ -59,7 +59,7 @@ GotoPerson::on_tick()
       goal_sent = false;
     }
   }
-  
+
   if (!goal_sent) {
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();

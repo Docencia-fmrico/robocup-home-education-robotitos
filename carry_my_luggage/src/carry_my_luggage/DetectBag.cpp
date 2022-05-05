@@ -28,6 +28,7 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 {
   found_bag_ = false;
   turning_done = false;
+  turn = false;
   pixel_counter_ = 0;
   right_counter_ = 0;
   left_counter_ = 0;
@@ -87,82 +88,80 @@ DetectBag::tick()
   dialogflow_ros_msgs::DialogflowResult result;
 
   switch (state_)
-    {
-      case IDLE:
-        std::cerr << "entro aqui" << std::endl;
-        if (fowarder.intent_ == "Default Fallback Intent")
-        {
-          state_ = LISTEN;
-          break;
-        }
-        if (right_counter_ >= 3){
-          turn_ts_ = ros::Time::now();
-          state_ = TURN;
-          break;
-        }
-        else if (left_counter_ >= 3){
-          turn_ts_ = ros::Time::now();
-          state_ = TURN;
-          break;
-        }
+  {
+    case IDLE:
+      std::cerr << "entro aqui" << std::endl;
+      turn_ts_ = ros::Time::now();
+      if ((right_counter_ >= 3) || (left_counter_ >= 3)){
+        turn = true;
+        state_ = TURN;
+      } else {
         state_ = LISTEN;
-        break;
-      case TURN:
-        
-        std::cerr << ros::Time::now() - turn_ts_ << std::endl;
-        if (right_counter_ > 3) {
-          std::cerr << right_counter_ << std::endl;
-          std::cerr << "entro TuRN" << std::endl;
-          if ((ros::Time::now() -turn_ts_).toSec() < 3){
-            
-            cmd.angular.z = 0.5;
-          }
-          else {
-            turning_done = true;
-            cmd.angular.z = 0;
-          }
-        }
-        pub_vel_.publish(cmd);
-
-       /* if (right_counter_ >= 3) {
-          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
-            cmd.angular.z = 0.5;
-          } else {
-            std::cerr << "GIRADO DERECHA" << std::endl;
-            turning_done = true;
-            cmd.angular.z = 0.0;
-            state_ = LISTEN;
-          }
-        } else if (left_counter_ >= 3) {
-          std::cerr << ros::Time::now() - turn_ts_ << std::endl;
-          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
-            cmd.angular.z = -0.5;
-          } else {
-            std::cerr << "GIRADO IZQUIERDA" << std::endl;
-            turning_done = true;
-            cmd.angular.z = 0.0;
-            state_ = LISTEN;
-          }
-        } else {
-          std::cerr << "Me salgo" << std::endl;
-          state_ = LISTEN;
-        }*/
-        break;
-      case LISTEN:
-        //fowarder.listen();
-        //speak_ts_ = ros::Time::now();
+      }
+      if (turning_done) {
         cmd.angular.z = 0.0;
-        state_ = SPEAK;
-        break;
-      case SPEAK:
-        //if ((ros::Time::now() - speak_ts_).toSec() >= 3)
-        //{
-        std::cerr << "entro SPEAK" << std::endl;
-        state_ = IDLE;
-        //}
-        break;
-    }
+        state_ = LISTEN;
+      }
+      break;
+    case TURN:
+      if (right_counter_ >= 3) {
+        if ((ros::Time::now() - turn_ts_).toSec() < 3) {
+          cmd.angular.z = 0.5;
+        } else {
+          std::cerr << "GIRADO DERECHA" << std::endl;
+          turning_done = true;
+          state_ = LISTEN;
+        }
+      } else if (left_counter_ >= 3) {
+        std::cerr << ros::Time::now() - turn_ts_ << std::endl;
+        if ((ros::Time::now() - turn_ts_).toSec() < 3) {
+          cmd.angular.z = -0.5;
+        } else {
+          std::cerr << "GIRADO IZQUIERDA" << std::endl;
+          turning_done = true;
+          state_ = LISTEN;
+        }
+      }
+      break;
+    case LISTEN:
+      //fowarder.listen();
+      //speak_ts_ = ros::Time::now();
+      state_ = SPEAK;
+      break;
+    case SPEAK:
+      //if ((ros::Time::now() - speak_ts_).toSec() >= 3)
+      //{
+      std::cerr << "entro SPEAK" << std::endl;
+      state_ = IDLE;
+      //}
+      break;
+  }
     
+      /*
+  if (turn) {
+    if (right_counter_ >= 3) {
+      if ((ros::Time::now() - turn_ts_).toSec() < 3) {
+        cmd.angular.z = 0.5;
+      } else {
+        std::cerr << "GIRADO DERECHA" << std::endl;
+        turning_done = true;
+        cmd.angular.z = 0.0;
+        state_ = LISTEN;
+      }
+    } else if (left_counter_ >= 3) {
+      std::cerr << ros::Time::now() - turn_ts_ << std::endl;
+      if ((ros::Time::now() - turn_ts_).toSec() < 3) {
+        cmd.angular.z = -0.5;
+      } else {
+        std::cerr << "GIRADO IZQUIERDA" << std::endl;
+        turning_done = true;
+        cmd.angular.z = 0.0;
+        state_ = LISTEN;
+      }
+    }*/
+
+    pub_vel_.publish(cmd);
+  }
     
 
   return BT::NodeStatus::SUCCESS;

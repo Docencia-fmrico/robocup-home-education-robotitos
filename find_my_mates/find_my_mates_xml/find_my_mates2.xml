@@ -6,10 +6,10 @@
             <Sequence>
                 <Sequence>
                     <RetryUntilSuccessful num_attempts="6">
-                        <Sequence>
+                        <ReactiveSequence>
                             <Action ID="GotoPerson"/>
                             <Action ID="DetectPerson"/>
-                        </Sequence>
+                        </ReactiveSequence>
                     </RetryUntilSuccessful>
                 </Sequence>
                 <Action ID="GotoReferee"/>
