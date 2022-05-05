@@ -5,19 +5,11 @@
         <SequenceStar>
             <Action ID="GotoReferee"/>
             <Action ID="DetectBag"/>
-            <ReactiveFallback>
-                <Timeout msec="500">
-                    <Action ID="ListenStop"/>
-                </Timeout>
                 <ReactiveSequence>
                     <Action ID="DetectPerson"/>
                     <Action ID="GotoPerson"/>
                 </ReactiveSequence>
-            </ReactiveFallback>
-            <ReactiveFallback>
-                <Action ID="DetectObject"/>
-                <Action ID="GotoArena"/>
-            </ReactiveFallback>
+            <Action ID="GotoArena"/>
         </SequenceStar>
     </BehaviorTree>
     <!-- ////////// -->
