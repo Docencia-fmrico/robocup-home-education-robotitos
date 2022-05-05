@@ -50,8 +50,10 @@ DetectPerson::tick()
   }
 
   if (found_person_) {
+    found_person_ = false;
     return BT::NodeStatus::SUCCESS;
   } else {
+    found_person_ = false;
     return BT::NodeStatus::FAILURE;
   }
 }
