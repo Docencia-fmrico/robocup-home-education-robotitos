@@ -5,10 +5,15 @@
         <SequenceStar>
             <Action ID="GotoReferee"/>
             <Action ID="DetectBag"/>
-            <ReactiveSequence>
-                <Action ID="DetectPerson"/>
-                <Action ID="GotoPerson"/>
-            </ReactiveSequence>
+            <ReactiveFallback>
+                <Timeout msec="500">
+                    <Action ID="ListenStop"/>
+                </Timeout>
+                <ReactiveSequence>
+                    <Action ID="DetectPerson"/>
+                    <Action ID="GotoPerson"/>
+                </ReactiveSequence>
+            </ReactiveFallback>
             <ReactiveFallback>
                 <Action ID="DetectObject"/>
                 <Action ID="GotoArena"/>
@@ -20,9 +25,10 @@
         <Action ID="DetectBag"/>
         <Action ID="DetectObject"/>
         <Action ID="DetectPerson"/>
-        <Action ID="GotoPerson"/>
         <Action ID="GotoArena"/>
         <Action ID="GotoDoor"/>
+        <Action ID="GotoPerson"/>
+        <Action ID="GotoReferee"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>
