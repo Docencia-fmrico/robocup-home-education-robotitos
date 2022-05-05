@@ -20,6 +20,7 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
   found_bag_ = false;
   turning_done = false;
   state_ = IDLE;
+  fowarder.intent_ = "INIT";
   sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &DetectBag::DetectBagCallBack, this);
   pub_vel_ = n_.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 1);
 }
@@ -38,7 +39,7 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
       px = (box.xmax + box.xmin) / 2;
       py = (box.ymax + box.ymin) / 2;
 
-      if (px - px_init > 4){
+      if ((px - px_init) > 4 && (fowarder.intent_ == "DetectBag")){
         if ((left_counter_ >= 3))
         {
           std::cerr << "Izquierda" << std::endl;
@@ -49,7 +50,7 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
           right_counter_ = 0;
         }        
       }
-      else if (px - px_init < -4){
+      else if ((px - px_init < -4) && (fowarder.intent_ == "DetectBag")){
         if (right_counter_ >= 3){
           std::cerr << "Derecha" << std::endl;
         }
@@ -95,14 +96,13 @@ DetectBag::tick()
         }
         else if (fowarder.intent_ == "GO")
         {
-          std::cerr << "LETSGO" << std::endl;
+          ROS_INFO("[DetectBag] ---------> Follow");
           return BT::NodeStatus::SUCCESS;
           break;
         }
         state_ = LISTEN;
         break;
       case TURN:
-        std::cerr << "TIEMPO" << (ros::Time::now() - turn_ts_).toSec() << std::endl;
         if (right_counter_ > 3) {
           if ((ros::Time::now() -turn_ts_).toSec() < 1){
             turning_done = true;
@@ -131,25 +131,31 @@ DetectBag::tick()
           }
         }
         pub_vel_.publish(cmd);
-        std::cerr << "Estoy AQUI" << std::endl;
         break;
       case LISTEN:
         if ( fowarder.intent_ == "DetectBag") {
-          std::cerr << "hola" << std::endl;
+         
 
           state_ = IDLE;
           break;
         }
-        fowarder.listen();
-
         speak_ts_ = ros::Time::now();
         cmd.angular.z = 0.0;
         state_ = SPEAK;
         break;
       case SPEAK:
+        
+        if (fowarder.intent_ == "INIT") {
+          fowarder.speak("Choose one bag");
+          fowarder.intent_ = "DetectBag";
+        }
+        if (fowarder.intent_ == "GO") {
+          fowarder.speak("Ok, I follow you now");
+          fowarder.intent_ == "DetectBag";
+        }
         if ((ros::Time::now() - speak_ts_).toSec() >= 3)
         {
-        state_ = IDLE;
+          state_ = IDLE;
         }
         break;
     }
