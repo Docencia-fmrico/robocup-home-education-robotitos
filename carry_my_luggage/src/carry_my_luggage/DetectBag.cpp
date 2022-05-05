@@ -9,6 +9,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <std_msgs/Float32.h>
+#include <gb_dialog/DialogInterface.h>
 #include <darknet_ros_msgs/BoundingBoxes.h>
 #include <darknet_ros_msgs/ObjectCount.h>
 #include <message_filters/subscriber.h>
@@ -48,7 +49,7 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
       px = (box.xmax + box.xmin) / 2;
       py = (box.ymax + box.ymin) / 2;
 
-      if (px - px_init > 2){
+      if (px - px_init > 4){
         if (left_counter_ >= 3)
         {
           std::cerr << "Izquierda" << std::endl;
@@ -57,9 +58,10 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
         right_counter_ = 0;
         
       }
-      else if (px - px_init < -2){
+      else if (px - px_init < -4){
         if (right_counter_ >= 3){
           std::cerr << "Derecha" << std::endl;
+          turn_ts_ = ros::Time::now();
         }
         right_counter_++;
         left_counter_ = 0;
@@ -77,28 +79,86 @@ DetectBag::halt()
 BT::NodeStatus
 DetectBag::tick()
 {
-  geometry_msgs::Twist cmd;
-  //fowarder.step();
-  turn_ts_ = ros::Time::now();
-  if (left_counter_ >= 4) {
+  dialogflow_ros_msgs::DialogflowResult result;
+
+  switch (state_)
+    {
+      case IDLE:
+        if (fowarder.intent_ == "Default Fallback Intent")
+        {
+          state_ = LISTEN;
+          break;
+        }
+        if (right_counter_ >= 3){
+          turn_ts_ = ros::Time::now();
+          state_ = TURN;
+          break;
+        }
+        else if (left_counter_ >= 3){
+          turn_ts_ = ros::Time::now();
+          state_ = TURN;
+          break;
+        }
+        state_ = LISTEN;
+        break;
+      case TURN:
+        if (right_counter_ >= 3) {
+          if ((ros::Time::now() - turn_ts_).toSec() >= 3) {
+            cmd.angular.z = -0.3;
+          }
+          else {
+            cmd.angular.z = 0.0;
+          }
+        }
+        if (left_counter_ >= 3) {
+          if ((ros::Time::now() - turn_ts_).toSec() >= 3) {
+            cmd.angular.z = 0.3;
+          }
+          else {
+            cmd.angular.z = 0.0;
+          }
+        }
+        pub_vel_.publish(cmd);
+        state_ = LISTEN;
+        break;
+      case LISTEN:
+        //fowarder.listen();
+        //speak_ts_ = ros::Time::now();
+        state_ = SPEAK;
+        break;
+      case SPEAK:
+        //if ((ros::Time::now() - speak_ts_).toSec() >= 3)
+        //{
+        state_ = IDLE;
+        //}
+        break;
+    }
+  
+  /*if (left_counter_ >= 4) {
     while ((ros::Time::now() - turn_ts_).toSec() <= 3)
     {
+      std::cerr << "ESTOY AQUI IZQUIERDAA" << std::endl;
       cmd.angular.z = 0.3;
+      pub_vel_.publish(cmd);
     }
   }
   else if (right_counter_ >= 4) {
     while ((ros::Time::now() - turn_ts_).toSec() <= 3)
     {
+      std::cerr << (ros::Time::now() -turn_ts_).toSec() << std::endl;
+      std::cerr << "ESTOY AQUI DERECHA" << std::endl;
       cmd.angular.z = -0.3;
+      pub_vel_.publish(cmd);
     }
   }
   cmd.angular.z = 0.0;
+  pub_vel_.publish(cmd);
   if (status() == BT::NodeStatus::IDLE)
   {
     ROS_INFO("Bag");
-  }
+  }*/
 
-  return BT::NodeStatus::RUNNING;
+  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace carry_my_luggage
