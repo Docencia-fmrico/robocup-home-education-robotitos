@@ -72,9 +72,22 @@ GotoPerson::on_tick()
     goal.target_pose.pose.orientation.w = person[count][3];
     std::cout <<"x: " << person[count][0] << ", y: " << person[count][1] << ", z: " << person[count][2] << std::endl;
 
+<<<<<<< HEAD
+      set_goal(goal);
+      goal_sent = true;
+    } else if ((person[count][0] == directions.target_pose.pose.position.x) && 
+              (person[count][1] == directions.target_pose.pose.position.y) &&
+              (person[count][2] == directions.target_pose.pose.orientation.z)) {
+              
+                count++;
+                goal_sent = false;
+              }
+  }
+=======
     set_goal(goal);
     goal_sent = true;
   } 
+>>>>>>> 1d16ac88e98445bfcf6b9675c5d2f370ac31f43d
   return BT::NodeStatus::RUNNING;
 }
 
