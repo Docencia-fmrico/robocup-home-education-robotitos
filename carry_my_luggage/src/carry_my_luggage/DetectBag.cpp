@@ -108,14 +108,14 @@ DetectBag::tick()
       case TURN:
         if (right_counter_ >= 3) {
           if ((ros::Time::now() - turn_ts_).toSec() < 3) {
-            cmd.angular.z = -0.5;
+            cmd.angular.z = 0.5;
           } else {
             turning_done = true;
             state_ = LISTEN;
           }
         } else if (left_counter_ >= 3) {
           if ((ros::Time::now() - turn_ts_).toSec() < 3) {
-            cmd.angular.z = 0.5;
+            cmd.angular.z = -0.5;
           } else {
             turning_done = true;
             state_ = LISTEN;

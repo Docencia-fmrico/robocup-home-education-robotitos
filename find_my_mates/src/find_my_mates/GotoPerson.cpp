@@ -19,12 +19,14 @@ GotoPerson::GotoPerson(
 : BTNavAction(name, action_name, config), goal_sent(false), count(0)
 { 
   direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
+  //goal_= n_.subscribe("/move_base/status", 1, &GotoPerson::statusCallBack,this);
 }
 
 void
 GotoPerson::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 {
 	ROS_INFO("Current count %lf", feedback->base_position.pose.position.x);
+
 }
 
 void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position) {
@@ -49,36 +51,30 @@ GotoPerson::on_start() {}
 BT::NodeStatus
 GotoPerson::on_tick()
 {
-  if (status() == BT::NodeStatus::IDLE)
-  {
-    ROS_INFO("Yendo donde la persona");
-  }
-
   move_base_msgs::MoveBaseGoal goal;
-  
-  if (count < 6) {
-    if (!goal_sent) {
-      goal.target_pose.header.frame_id = "map";
-      goal.target_pose.header.stamp = ros::Time::now();
-      goal.target_pose.pose.position.x = person[count][0];
-      goal.target_pose.pose.position.y = person[count][1];
-      goal.target_pose.pose.position.z = 0;
-      goal.target_pose.pose.orientation.x = 0;
-      goal.target_pose.pose.orientation.y = 0;
-      goal.target_pose.pose.orientation.z = person[count][2];
-      goal.target_pose.pose.orientation.w = person[count][3];
-      std::cout <<"x: " << person[count][0] << ", y: " << person[count][1] << ", z: " << person[count][2] << std::endl;
-
-      set_goal(goal);
-      goal_sent = true;
-    } else if ((person[count][0] == directions.target_pose.pose.position.x) && 
-              (person[count][1] == directions.target_pose.pose.position.y) &&
-              (person[count][2] == directions.target_pose.pose.orientation.z)) {
-                cancel_goal();
-                count++;
-                goal_sent = false;
-              }
+  for (int i =0; i<6; i++) {
+    if (person[i][0] == directions.target_pose.pose.position.x) {
+      count = i++;
+      std::cout << count << std::endl;
+      goal_sent = false;
+    }
   }
+  
+  if (!goal_sent) {
+    goal.target_pose.header.frame_id = "map";
+    goal.target_pose.header.stamp = ros::Time::now();
+    goal.target_pose.pose.position.x = person[count][0];
+    goal.target_pose.pose.position.y = person[count][1];
+    goal.target_pose.pose.position.z = 0;
+    goal.target_pose.pose.orientation.x = 0;
+    goal.target_pose.pose.orientation.y = 0;
+    goal.target_pose.pose.orientation.z = person[count][2];
+    goal.target_pose.pose.orientation.w = person[count][3];
+    std::cout <<"x: " << person[count][0] << ", y: " << person[count][1] << ", z: " << person[count][2] << std::endl;
+
+    set_goal(goal);
+    goal_sent = true;
+  } 
   return BT::NodeStatus::RUNNING;
 }
 
