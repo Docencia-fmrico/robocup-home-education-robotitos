@@ -44,16 +44,17 @@ int main(int argc, char **argv)
   auto blackboard = BT::Blackboard::create();
 
   std::string pkgpath = ros::package::getPath("find_my_mates");
-  std::string xml_file = pkgpath + "/find_my_mates_xml/find_my_mates1.xml";
+  std::string xml_file = pkgpath + "/find_my_mates_xml/find_my_mates2.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   ros::Rate loop_rate(10);
 
+  bool finish = false;
   while (ros::ok())
   {
-    tree.rootNode()->executeTick();
+    finish = tree.rootNode()->executeTick() == BT::NodeStatus::SUCCESS;
 
     ros::spinOnce();
     loop_rate.sleep();
