@@ -8,15 +8,10 @@
                 <Action ID="GotoReferee"/>
             </ReactiveSequence>
             <Action ID="DetectBag"/>
-            <ReactiveFallback>
-                <Timeout msec="500">
-                    <Action ID="ListenStop"/>
-                </Timeout>
-                <ReactiveSequence>
-                    <Action ID="DetectPerson"/>
-                    <Action ID="GotoPerson"/>
-                </ReactiveSequence>
-            </ReactiveFallback>
+            <ReactiveSequence>
+                <Action ID="DetectPerson"/>
+                <Action ID="GotoPerson"/>
+            </ReactiveSequence>
             <Action ID="GotoArena"/>
         </SequenceStar>
     </BehaviorTree>
@@ -29,7 +24,6 @@
         <Action ID="GotoDoor"/>
         <Action ID="GotoPerson"/>
         <Action ID="GotoReferee"/>
-        <Action ID="ListenStop"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

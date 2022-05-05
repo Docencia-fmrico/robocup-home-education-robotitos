@@ -1,15 +1,9 @@
 #include "carry_my_luggage/DetectObject.h"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
-#include <cv_bridge/cv_bridge.h>
-#include <message_filters/subscriber.h>
-#include <message_filters/time_synchronizer.h>
-#include <message_filters/sync_policies/approximate_time.h>
-
-#include <sensor_msgs/Image.h>
-#include <darknet_ros_msgs/BoundingBoxes.h>
-#include <darknet_ros_msgs/ObjectCount.h>
+#include "behaviortree_cpp_v3/bt_factory.h"
 #include "sensor_msgs/LaserScan.h"
+#include "geometry_msgs/Twist.h"
 
 #include "ros/ros.h"
 #include <string>
@@ -18,39 +12,9 @@ namespace carry_my_luggage
 {
 
 DetectObject::DetectObject(const std::string& name, const BT::NodeConfiguration & config)
-: BT::ConditionNode(name, config), sync_bbx(MySyncPolicy_bbx(10),image_depth_sub, bbx_sub), obstacle_detected_(false)
+: BT::ConditionNode(name, config), obstacle_detected_(false), state_(GOING_FORWARD)
 { 
-  image_depth_sub.subscribe(n_, "/camera/depth/image_raw", 1);
-  bbx_sub.subscribe(n_, "/darknet_ros/bounding_boxes", 1);
-
-  sync_bbx.registerCallback(boost::bind(&DetectObject::callback_bbx, this,  _1, _2));
   sub_laser_ = n_.subscribe("/scan_filtered",1,&DetectObject::laserCallBack,this);
-}
-
-void
-DetectObject::callback_bbx(const sensor_msgs::ImageConstPtr& image, const darknet_ros_msgs::BoundingBoxesConstPtr& boxes){
-  ROS_INFO(" callback detectperson dist");
-  cv_bridge::CvImagePtr img_ptr_depth;
-
-  try{
-      img_ptr_depth = cv_bridge::toCvCopy(*image, sensor_msgs::image_encodings::TYPE_32FC1);
-  }
-  catch (cv_bridge::Exception& e)
-  {
-      ROS_ERROR("cv_bridge exception:  %s", e.what());
-      return;
-  }
-  px_max = image->width;
-  px_min = 0;
-  obstacle_detected_ = false;
-  for (const auto & box : boxes->bounding_boxes) {
-    if (box.Class == "person") {
-      px = (box.xmax + box.xmin) / 2;
-      int py = (box.ymax + box.ymin) / 2;
-      obstacle_detected_ = true; //estaba aqui en falso y no se como funcionaba
-      dist = img_ptr_depth->image.at<float>(cv::Point(px, py)) * 0.001f;
-    }
-  }
 }
 
 void
@@ -59,16 +23,18 @@ DetectObject::laserCallBack(const sensor_msgs::LaserScan::ConstPtr& laser)
     int min_izq = laser->range_max*0.9;
     int max_dcha = laser->range_max*0.1;
 
-    int dist_min = 0.5;
+    int dist_min = 0.4;
 
     for (int i = laser->range_min; i <= max_dcha; i++) {
         if (laser->ranges[i] <= dist_min && laser->ranges[i] != 0.0){
             obstacle_detected_=true;
+            obstacle_state_ = RIGHT_DETECTED;
         }
     }
     for (int i = laser->range_max; i >= min_izq; i--) {
         if (laser->ranges[i] <= dist_min && laser->ranges[i] != 0.0){
             obstacle_detected_=true;
+            obstacle_state_ = LEFT_DETECTED;
         }
     }
 }
@@ -76,28 +42,67 @@ DetectObject::laserCallBack(const sensor_msgs::LaserScan::ConstPtr& laser)
 BT::NodeStatus
 DetectObject::tick()
 {
-  /*
-  if (obstacle_detected_ == true) {
-    if (dist >= 1.4) {
-      setOutput("foward_velocity", std::to_string(foward_velocity));
-    } else if (dist <= 1.0) {
-      setOutput("foward_velocity", "-0.1" );
-    } else {
-      setOutput("foward_velocity", "0.0" );
+  geometry_msgs::Twist cmd;
+
+  switch (state_)
+  {
+     case GOING_FORWARD:
+      cmd.linear.x = 0.0;
+      cmd.angular.z = 0.0;
+
+      if (obstacle_detected_)
+      {
+        detected_ts_ = ros::Time::now();
+        state_ = GOING_BACK;
+        ROS_INFO("GOING_FORWARD -> GOING_BACK");
+      }
+
+      break;
+    case GOING_BACK:
+      cmd.linear.x = -0.0;
+      cmd.angular.z = 0.0;
+
+      if ((ros::Time::now() - detected_ts_).toSec() > BACKING_TIME )
+      {
+        turn_ts_ = ros::Time::now();
+        if (obstacle_state_ == RIGHT_DETECTED)
+        {
+          state_ = TURNING_LEFT;
+          ROS_INFO("GOING_BACK -> TURNING_LEFT");
+        }
+        else
+        {
+          state_ = TURNING_RIGHT;
+          ROS_INFO("GOING_BACK -> TURNING_RIGHT");
+        }
+      }
+
+      break;
+    case TURNING_LEFT:
+      cmd.linear.x = 0.0;
+      cmd.angular.z = 0.0;
+
+
+      if ((ros::Time::now()-turn_ts_).toSec() > TURNING_TIME )
+      {
+        state_ = GOING_FORWARD;
+        ROS_INFO("TURNING_LEFT -> GOING_FORWARD");
+      }
+      break;
+    case TURNING_RIGHT:
+      cmd.linear.x = 0.0;
+      cmd.angular.z = -0.0;
+
+
+      if ((ros::Time::now()-turn_ts_).toSec() > TURNING_TIME )
+      {
+        state_ = GOING_FORWARD;
+        ROS_INFO("TURNING_RIGHT -> GOING_FORWARD");
+      }
+      break;
     }
 
-    //comprobamos si debemos girar un poco o no dependiendo de donde se encuentre la persona
-    if (px >= 440) {
-      setOutput("turn_velocity", std::to_string(-turn_right_velocity));
-    } else if (px <= 200) {
-      setOutput("turn_velocity", std::to_string(turn_left_velocity));
-    } else {
-      setOutput("turn_velocity", "0.0");
-    }
-    return BT::NodeStatus::SUCCESS;
-  } else {
-    return BT::NodeStatus::FAILURE;
-  }*/
+  pub_vel_.publish(cmd);
   return BT::NodeStatus::SUCCESS;
 }
 
