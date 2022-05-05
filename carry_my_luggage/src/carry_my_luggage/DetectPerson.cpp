@@ -40,7 +40,7 @@ namespace carry_my_luggage
 
 DetectPerson::DetectPerson(const std::string& name, const BT::NodeConfiguration & config)
 : BT::ActionNodeBase(name, {}), sync_bbx(MySyncPolicy_bbx(10),image_depth_sub, bbx_sub), obstacle_detected_(false),
-  objectFrameId_("/object/0"), workingFrameId_("/base_footprint"), cameraTopicId_("/camera/depth_registered/points"), found_person_(false) // depth_registered
+  objectFrameId_("/object/0"), workingFrameId_("/base_footprint"), cameraTopicId_("/camera/depth/points"), found_person_(false) // depth_registered
 { 
   image_depth_sub.subscribe(n_, "/camera/depth/image_raw", 1);
   bbx_sub.subscribe(n_, "/darknet_ros/bounding_boxes", 1);

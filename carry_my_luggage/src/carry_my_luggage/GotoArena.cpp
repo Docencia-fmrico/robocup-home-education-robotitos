@@ -35,12 +35,12 @@ GotoArena::on_start() {
 
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
-    goal.target_pose.pose.position.x = 0.0;
-    goal.target_pose.pose.position.y = 0.0;
+    goal.target_pose.pose.position.x = 5.44;
+    goal.target_pose.pose.position.y = -7.361;
     goal.target_pose.pose.position.z = 0.0;
     goal.target_pose.pose.orientation.x = 0.0;
     goal.target_pose.pose.orientation.y = 0.0;
-    goal.target_pose.pose.orientation.z = 0.0;
+    goal.target_pose.pose.orientation.z = 1.378;
     goal.target_pose.pose.orientation.w = 1.0;
 
     set_goal(goal);
@@ -57,12 +57,12 @@ GotoArena::on_tick()
 
         goal.target_pose.header.frame_id = "map";
         goal.target_pose.header.stamp = ros::Time::now();
-        goal.target_pose.pose.position.x = 0.0;
-        goal.target_pose.pose.position.y = 0.0;
+        goal.target_pose.pose.position.x = 3.259;
+        goal.target_pose.pose.position.y = 4.742;
         goal.target_pose.pose.position.z = 0.0;
         goal.target_pose.pose.orientation.x = 0.0;
         goal.target_pose.pose.orientation.y = 0.0;
-        goal.target_pose.pose.orientation.z = 0.0;
+        goal.target_pose.pose.orientation.z = 3.085;
         goal.target_pose.pose.orientation.w = 1.0;
 
         set_goal(goal);

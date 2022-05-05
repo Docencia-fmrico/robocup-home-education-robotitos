@@ -15,6 +15,7 @@ DetectObject::DetectObject(const std::string& name, const BT::NodeConfiguration 
 : BT::ConditionNode(name, config), obstacle_detected_(false), state_(GOING_FORWARD)
 { 
   sub_laser_ = n_.subscribe("/scan_filtered",1,&DetectObject::laserCallBack,this);
+  pub_vel_ = n_.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 1);
 }
 
 void
@@ -103,7 +104,11 @@ DetectObject::tick()
     }
 
   pub_vel_.publish(cmd);
-  return BT::NodeStatus::SUCCESS;
+  if (state_ != GOING_FORWARD) {
+    return BT::NodeStatus::RUNNING;
+  } else {
+    return BT::NodeStatus::SUCCESS;
+  }
 }
 
 }  // namespace carry_my_luggage

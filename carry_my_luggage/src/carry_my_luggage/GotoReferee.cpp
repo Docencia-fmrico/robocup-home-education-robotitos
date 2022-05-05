@@ -55,12 +55,12 @@ GotoReferee::on_tick()
     {
         pos_referee_.target_pose.header.frame_id = "map";
         pos_referee_.target_pose.header.stamp = ros::Time::now();
-        pos_referee_.target_pose.pose.position.x = 1.08;
-        pos_referee_.target_pose.pose.position.y = 3.32;
+        pos_referee_.target_pose.pose.position.x = 1.12;
+        pos_referee_.target_pose.pose.position.y = 3.38;
         pos_referee_.target_pose.pose.position.z = 0.0;
         pos_referee_.target_pose.pose.orientation.x = 0.0;
         pos_referee_.target_pose.pose.orientation.y = 0.0;
-        pos_referee_.target_pose.pose.orientation.z = -2.502;
+        pos_referee_.target_pose.pose.orientation.z = -2.452;
         pos_referee_.target_pose.pose.orientation.w = 1.0;
         set_goal(pos_referee_);
         goal_sent = true;
