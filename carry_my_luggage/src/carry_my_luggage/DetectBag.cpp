@@ -148,6 +148,7 @@ DetectBag::tick()
       case LISTEN:
         if ( fowarder.intent_ == "DetectBag") {
           std::cerr << "hola" << std::endl;
+          
           state_ = IDLE;
           break;
         }
