@@ -40,7 +40,6 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 void
 DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes) {
   
-  turn_ts_ = ros::Time::now();
   for (const auto & box : boxes->bounding_boxes) {
     if (box.Class =="person") {
       if (!found_person_){
@@ -52,20 +51,25 @@ DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxe
       py = (box.ymax + box.ymin) / 2;
 
       if (px - px_init > 4){
-        if (left_counter_ >= 3)
+        if ((left_counter_ >= 3))
         {
           std::cerr << "Izquierda" << std::endl;
         }
-        left_counter_++;
-        right_counter_ = 0;
-        
+        if (!turning_done)
+        {
+          left_counter_++;
+          right_counter_ = 0;
+        }        
       }
       else if (px - px_init < -4){
         if (right_counter_ >= 3){
           std::cerr << "Derecha" << std::endl;
         }
-        right_counter_++;
-        left_counter_ = 0;
+        if(!turning_done)
+        {
+          right_counter_++;
+          left_counter_ = 0;
+        }
       }
     }
   }
@@ -85,6 +89,7 @@ DetectBag::tick()
   switch (state_)
     {
       case IDLE:
+        std::cerr << "entro aqui" << std::endl;
         if (fowarder.intent_ == "Default Fallback Intent")
         {
           state_ = LISTEN;
@@ -99,30 +104,49 @@ DetectBag::tick()
           turn_ts_ = ros::Time::now();
           state_ = TURN;
           break;
-        } else if (turning_done) {
-          right_counter_ = 0;
-          left_counter_ = 0;
         }
         state_ = LISTEN;
         break;
       case TURN:
-        if (right_counter_ >= 3) {
-          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
-            cmd.angular.z = -0.5;
-          } else {
-            turning_done = true;
-            state_ = LISTEN;
+        
+        std::cerr << ros::Time::now() - turn_ts_ << std::endl;
+        if (right_counter_ > 3) {
+          std::cerr << right_counter_ << std::endl;
+          std::cerr << "entro TuRN" << std::endl;
+          if ((ros::Time::now() -turn_ts_).toSec() < 3){
+            
+            cmd.angular.z = 0.5;
           }
-        } else if (left_counter_ >= 3) {
+          else {
+            turning_done = true;
+            cmd.angular.z = 0;
+          }
+        }
+        pub_vel_.publish(cmd);
+
+       /* if (right_counter_ >= 3) {
           if ((ros::Time::now() - turn_ts_).toSec() < 3) {
             cmd.angular.z = 0.5;
           } else {
+            std::cerr << "GIRADO DERECHA" << std::endl;
             turning_done = true;
+            cmd.angular.z = 0.0;
+            state_ = LISTEN;
+          }
+        } else if (left_counter_ >= 3) {
+          std::cerr << ros::Time::now() - turn_ts_ << std::endl;
+          if ((ros::Time::now() - turn_ts_).toSec() < 3) {
+            cmd.angular.z = -0.5;
+          } else {
+            std::cerr << "GIRADO IZQUIERDA" << std::endl;
+            turning_done = true;
+            cmd.angular.z = 0.0;
             state_ = LISTEN;
           }
         } else {
+          std::cerr << "Me salgo" << std::endl;
           state_ = LISTEN;
-        }
+        }*/
         break;
       case LISTEN:
         //fowarder.listen();
@@ -133,11 +157,13 @@ DetectBag::tick()
       case SPEAK:
         //if ((ros::Time::now() - speak_ts_).toSec() >= 3)
         //{
+        std::cerr << "entro SPEAK" << std::endl;
         state_ = IDLE;
         //}
         break;
     }
-    pub_vel_.publish(cmd);
+    
+    
 
   return BT::NodeStatus::SUCCESS;
 }
