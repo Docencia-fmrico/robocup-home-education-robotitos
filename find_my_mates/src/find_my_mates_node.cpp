@@ -12,6 +12,7 @@
 
 #include "find_my_mates/DetectPerson.h"
 #include "find_my_mates/GotoReferee.h"
+#include "find_my_mates/GotoArena.h"
 #include "find_my_mates/GotoPerson.h"
 
 int main(int argc, char **argv)
@@ -23,6 +24,7 @@ int main(int argc, char **argv)
   BT::SharedLibrary loader;
 
   factory.registerNodeType<find_my_mates::DetectPerson>("DetectPerson");
+  factory.registerNodeType<find_my_mates::DetectPerson>("GotoArena");
   BT::NodeBuilder builder =
     [](const std::string & name, const BT::NodeConfiguration & config)
     {

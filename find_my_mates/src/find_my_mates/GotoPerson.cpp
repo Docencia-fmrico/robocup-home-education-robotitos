@@ -16,7 +16,7 @@ GotoPerson::GotoPerson(
   const std::string& name,
   const std::string & action_name,
   const BT::NodeConfiguration & config)
-: BTNavAction(name, action_name, config), goal_sent(false), count(1)
+: BTNavAction(name, action_name, config), goal_sent(false), count(0)
 { 
   direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
 }
@@ -41,7 +41,6 @@ void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStampe
 
 void
 GotoPerson::on_halt() {
-  cancel_goal();
 }
 
 void
@@ -72,9 +71,9 @@ GotoPerson::on_tick()
 
       set_goal(goal);
       goal_sent = true;
-    } else if ((person[count][0] - directions.target_pose.pose.position.x < 0.1) && 
-              (person[count][1] - directions.target_pose.pose.position.y < 0.1) &&
-              (person[count][2]- directions.target_pose.pose.orientation.z < 0.1)) {
+    } else if ((person[count][0] == directions.target_pose.pose.position.x) && 
+              (person[count][1] == directions.target_pose.pose.position.y) &&
+              (person[count][2] == directions.target_pose.pose.orientation.z)) {
                 cancel_goal();
                 count++;
                 goal_sent = false;
