@@ -28,6 +28,8 @@ int main(int argc, char **argv)
 
   factory.registerNodeType<carry_my_luggage::DetectPerson>("DetectPerson");
   factory.registerNodeType<carry_my_luggage::DetectBag>("DetectBag");
+  factory.registerNodeType<carry_my_luggage::DetectObject>("DetectObject");
+  
   BT::NodeBuilder builder =
     [](const std::string & name, const BT::NodeConfiguration & config)
     {
@@ -35,7 +37,6 @@ int main(int argc, char **argv)
     };
 
   factory.registerBuilder<carry_my_luggage::GotoPerson>("GotoPerson", builder);
-  factory.registerNodeType<carry_my_luggage::DetectObject>("DetectObject");
   
   BT::NodeBuilder builder_1 =
     [](const std::string & name, const BT::NodeConfiguration & config)

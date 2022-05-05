@@ -1,25 +1,15 @@
-
 #include <carry_my_luggage/DetectBag.h>
 #include <carry_my_luggage/CMLDialog.h>
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "geometry_msgs/Twist.h"
-#include <image_transport/image_transport.h>
-#include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <std_msgs/Float32.h>
 #include <gb_dialog/DialogInterface.h>
 #include <darknet_ros_msgs/BoundingBoxes.h>
 #include <darknet_ros_msgs/ObjectCount.h>
-#include <message_filters/subscriber.h>
-#include <message_filters/time_synchronizer.h>
+
 
 #include "ros/ros.h"
 #include <string>
-
-#define PIXEL_REQ 1000
 
 namespace carry_my_luggage
 {
@@ -29,9 +19,6 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 {
   found_bag_ = false;
   turning_done = false;
-  pixel_counter_ = 0;
-  right_counter_ = 0;
-  left_counter_ = 0;
   state_ = IDLE;
   sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &DetectBag::DetectBagCallBack, this);
   pub_vel_ = n_.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 1);
