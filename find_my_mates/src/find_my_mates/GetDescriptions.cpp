@@ -55,16 +55,7 @@ Dialog::personNameCB(dialogflow_ros_msgs::DialogflowResult result)
     speak(result.fulfillment_text);
     for(const auto & param : result.parameters){
         for (const auto & value : param.value){
-          switch(person_cnt_){
-            case 1:
-              person1[0] = value;
-              break;
-            case 2:
-              person2[0] = value;
-              break;
-            case 3:
-              person3[0] = value;
-          }
+          person[0] = value;
         }
       }
     ROS_INFO("[QUESTION] What is the color of your clothes?");
@@ -77,16 +68,7 @@ Dialog::clothesColorCB(dialogflow_ros_msgs::DialogflowResult result)
     speak(result.fulfillment_text);
     for(const auto & param : result.parameters){
         for (const auto & value : param.value){
-          switch(person_cnt_){
-            case 1:
-              person1[1] = value;
-              break;
-            case 2:
-              person2[1] = value;
-              break;
-            case 3:
-              person3[1] = value;
-          } 
+          person[1] = value;
         }
     }
     ROS_INFO("[QUESTION] What object do you carry?");
@@ -98,22 +80,8 @@ Dialog::personObjectCB(dialogflow_ros_msgs::DialogflowResult result)
     ROS_INFO("[Dialog] personObjectCB: intent [%s]", result.intent.c_str());
     speak(result.fulfillment_text);
     for(const auto & param : result.parameters){
-        std::cerr << "Param: " << param << std::endl;
         for (const auto & value : param.value){
-          switch(person_cnt_){
-            case 1:
-              person1[2] = value;
-              person_cnt_++;
-              break;
-            case 2:
-              person2[2] = value;
-              person_cnt_++;
-              break;
-            case 3:
-              person3[2] = value;
-              person_cnt_++;
-              break;
-          } 
+          person[2] = value;
         }
       }
 }
@@ -152,4 +120,4 @@ Dialog::step()
     }
 }
 
-} // namespace robocup_dialog
+} // namespace find_my_mates
