@@ -59,6 +59,8 @@ class GotoPerson : public BTNavAction
     tf2::Stamped<tf2::Transform> map2bf;
     tf2::Transform bf2obj;
     std::string error;
+    ros::Time time;
+    bool goal_send;
 
     int counter_, px;
 };

@@ -32,6 +32,8 @@ class DetectObject : public BT::ConditionNode
     ros::Publisher pub_vel_;
     bool obstacle_detected_;
     int obstacle_state_, state_;
+    int SECURITY_DISTANCE = 0.4;
+    int left_dist, right_dist;
 
     static const int GOING_FORWARD = 0;
     static const int GOING_BACK = 1;

@@ -15,28 +15,32 @@ DetectObject::DetectObject(const std::string& name, const BT::NodeConfiguration 
 : BT::ConditionNode(name, config), obstacle_detected_(false), state_(GOING_FORWARD)
 { 
   sub_laser_ = n_.subscribe("/scan_filtered",1,&DetectObject::laserCallBack,this);
+  pub_vel_ = n_.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 1);
 }
 
 void
 DetectObject::laserCallBack(const sensor_msgs::LaserScan::ConstPtr& laser)
 {
-    int min_izq = laser->range_max*0.9;
-    int max_dcha = laser->range_max*0.1;
-
-    int dist_min = 0.4;
-
-    for (int i = laser->range_min; i <= max_dcha; i++) {
-        if (laser->ranges[i] <= dist_min && laser->ranges[i] != 0.0){
-            obstacle_detected_=true;
-            obstacle_state_ = RIGHT_DETECTED;
-        }
-    }
-    for (int i = laser->range_max; i >= min_izq; i--) {
-        if (laser->ranges[i] <= dist_min && laser->ranges[i] != 0.0){
-            obstacle_detected_=true;
-            obstacle_state_ = LEFT_DETECTED;
-        }
-    }
+  int left = 700;
+  int right = 150;
+  
+  right_dist = laser->ranges[right];
+  left_dist = laser->ranges[left];
+  
+  if (left_dist < SECURITY_DISTANCE)
+  {
+    obstacle_state_ = LEFT_DETECTED;
+    obstacle_detected_ = true;
+  }
+  else if (right_dist < SECURITY_DISTANCE)
+  {
+    obstacle_state_ = RIGHT_DETECTED;
+    obstacle_detected_ = true;
+  }
+  else
+  {
+    obstacle_detected_ = false;
+  }
 }
 
 BT::NodeStatus
@@ -103,7 +107,11 @@ DetectObject::tick()
     }
 
   pub_vel_.publish(cmd);
-  return BT::NodeStatus::SUCCESS;
+  if (state_ != GOING_FORWARD) {
+    return BT::NodeStatus::RUNNING;
+  } else {
+    return BT::NodeStatus::SUCCESS;
+  }
 }
 
 }  // namespace carry_my_luggage

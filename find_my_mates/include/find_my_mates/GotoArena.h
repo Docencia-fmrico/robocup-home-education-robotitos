@@ -38,6 +38,7 @@ class GotoArena : public BTNavAction
     move_base_msgs::MoveBaseGoal pos_referee_;
     bool obstacle_detected_;
     double dist_;
+    int counter_;
 };
 
 }  // namespace find_my_mates

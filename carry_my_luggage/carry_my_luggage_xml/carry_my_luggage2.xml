@@ -3,10 +3,7 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <SequenceStar>
-            <ReactiveSequence>
-                <Action ID="DetectObject"/>
-                <Action ID="GotoReferee"/>
-            </ReactiveSequence>
+            <Action ID="GotoReferee"/>
             <Action ID="DetectBag"/>
             <ReactiveSequence>
                 <Action ID="DetectPerson"/>

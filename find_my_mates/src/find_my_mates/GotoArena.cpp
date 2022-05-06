@@ -15,7 +15,7 @@ GotoArena::GotoArena(
     const std::string& name, 
     const std::string & action_name,
     const BT::NodeConfiguration& config)
-: BTNavAction(name, action_name, config)
+: BTNavAction(name, action_name, config), counter_(0)
 {
     sub_laser_ = n_.subscribe("/scan",1,&GotoArena::GotoArenaCallBack,this);
     obstacle_detected_ = true;
@@ -50,16 +50,16 @@ GotoArena::on_tick()
       ROS_INFO("Going to referee's position");
     }
     
-    if (!obstacle_detected_)
+    if (counter_++ == 20)
     {
         pos_referee_.target_pose.header.frame_id = "map";
         pos_referee_.target_pose.header.stamp = ros::Time::now();
-        pos_referee_.target_pose.pose.position.x = 3.946;
-        pos_referee_.target_pose.pose.position.y = 4.723;
+        pos_referee_.target_pose.pose.position.x = 3.345;
+        pos_referee_.target_pose.pose.position.y = 2.922;
         pos_referee_.target_pose.pose.position.z = 0.0;
         pos_referee_.target_pose.pose.orientation.x = 0.0;
         pos_referee_.target_pose.pose.orientation.y = 0.0;
-        pos_referee_.target_pose.pose.orientation.z = 2.970;
+        pos_referee_.target_pose.pose.orientation.z = 3.03;
         pos_referee_.target_pose.pose.orientation.w = 1.0;
         set_goal(pos_referee_);
     }

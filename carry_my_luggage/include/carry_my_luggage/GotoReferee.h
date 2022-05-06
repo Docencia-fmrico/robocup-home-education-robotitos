@@ -39,6 +39,7 @@ class GotoReferee : public BTNavAction
     bool obstacle_detected_;
     bool goal_sent;
     double dist_;
+    int counter_;
 };
 
 }  // namespace carry_my_luggage
