@@ -130,7 +130,7 @@ GotoPerson::on_tick()
     set_goal(goal);
     counter_ = 0;
   }
-  if ((ros::Time::now() - time).toSec() > 100) {
+  if ((ros::Time::now() - time).toSec() > 120) {
     return BT::NodeStatus::SUCCESS;
   } else {
     return BT::NodeStatus::RUNNING;

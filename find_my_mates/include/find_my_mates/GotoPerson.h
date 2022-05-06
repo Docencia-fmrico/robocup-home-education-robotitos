@@ -15,6 +15,7 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "tf2/convert.h"
 #include "tf2_ros/message_filter.h"
+#include <darknet_ros_msgs/BoundingBoxes.h>
 
 #include "ros/ros.h"
 #include <string>
@@ -34,6 +35,7 @@ class GotoPerson : public BTNavAction
     void on_start() override;
     void on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) override;
     void DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position);
+    void GotoPersonCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes);
 
     static BT::PortsList providedPorts() {
       return {};
@@ -45,7 +47,9 @@ class GotoPerson : public BTNavAction
 
     ros::Subscriber direction_;
     move_base_msgs::MoveBaseGoal directions;
-    int count;
+    int count, counter_;
+    ros::Subscriber sub_darknet_;
+    bool found_person_;
 
 };
 

@@ -9,7 +9,6 @@
                 <Action ID="DetectPerson"/>
                 <Action ID="GotoPerson"/>
             </ReactiveSequence>
-            <Action ID="GotoArena"/>
         </SequenceStar>
     </BehaviorTree>
     <!-- ////////// -->

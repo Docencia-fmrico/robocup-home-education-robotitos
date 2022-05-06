@@ -96,11 +96,11 @@ public:
     if (nav_finished_)
     {
       if (nav_succeded_) {
-        return BT::NodeStatus::SUCCESS;
+        return BT::NodeStatus::RUNNING;
       }
       else
       {
-        return BT::NodeStatus::FAILURE;
+        return BT::NodeStatus::RUNNING;
       }
     }
     else
@@ -118,7 +118,7 @@ public:
 			const move_base_msgs::MoveBaseResultConstPtr& result)
 	{
     nav_finished_ = true;
-    nav_succeded_ = state.state_ == actionlib::SimpleClientGoalState::StateEnum::SUCCEEDED;
+    nav_succeded_ = state.state_ == actionlib::SimpleClientGoalState::StateEnum::PENDING;
 		ROS_INFO("Finished in state [%s]", state.toString().c_str());
 	}
 
