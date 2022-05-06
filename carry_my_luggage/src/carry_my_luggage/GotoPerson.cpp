@@ -29,6 +29,7 @@ GotoPerson::GotoPerson(
   const BT::NodeConfiguration & config)
 : BTNavAction(name, action_name, config), listener(buffer), counter_(0)
 { 
+  goal_send = false;
   direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
   sub_darknet_ = n_.subscribe("darknet_ros/bounding_boxes", 1, &GotoPerson::GotoPersonCallBack,this);
 }
@@ -71,6 +72,12 @@ GotoPerson::on_tick()
   }
 
   move_base_msgs::MoveBaseGoal goal;
+
+  if (!goal_send)
+  {
+    time = ros::Time::now();
+    goal_send = true;
+  }
 
   if (counter_++ == 10)
   {
@@ -123,7 +130,11 @@ GotoPerson::on_tick()
     set_goal(goal);
     counter_ = 0;
   }
-  return BT::NodeStatus::RUNNING;
+  if ((ros::Time::now() - time).toSec() > 100) {
+    return BT::NodeStatus::SUCCESS;
+  } else {
+    return BT::NodeStatus::RUNNING;
+  }
 }
 
 }  // namespace carry_my_luggage

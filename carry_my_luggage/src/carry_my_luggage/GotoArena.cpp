@@ -15,7 +15,7 @@ GotoArena::GotoArena(
     const std::string& name, 
     const std::string & action_name,
     const BT::NodeConfiguration& config)
-: BTNavAction(name, action_name, config)
+: BTNavAction(name, action_name, config), counter_(0)
 {
 }
 
@@ -51,7 +51,7 @@ GotoArena::on_start() {
 BT::NodeStatus
 GotoArena::on_tick()
 {
-    if (counter_++ == 20)
+    if (counter_++ == 60)
     {
         move_base_msgs::MoveBaseGoal goal;
 

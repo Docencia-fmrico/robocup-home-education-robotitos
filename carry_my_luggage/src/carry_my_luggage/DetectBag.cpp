@@ -106,7 +106,7 @@ DetectBag::tick()
         if (right_counter_ > 3) {
           if ((ros::Time::now() -turn_ts_).toSec() < 1){
             turning_done = true;
-            cmd.angular.z = 0.3;
+            cmd.angular.z = 0.5;
           }
           else {
             speak_ts_ = ros::Time::now();
@@ -118,7 +118,7 @@ DetectBag::tick()
         }
         else if (left_counter_ > 3) {
           if ((ros::Time::now() -turn_ts_).toSec() < 3){
-            cmd.angular.z = -0.3;
+            cmd.angular.z = -0.5;
             turning_done = true;
 
           }
