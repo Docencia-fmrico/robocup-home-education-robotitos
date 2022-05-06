@@ -28,40 +28,43 @@ DetectBag::DetectBag(const std::string& name, const BT::NodeConfiguration& confi
 
 void
 DetectBag::DetectBagCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes) {
-  
-  for (const auto & box : boxes->bounding_boxes) {
-    if (box.Class =="person") {
-      if (!found_person_){
-        found_person_ = true;
-        px_init = (box.xmax + box.xmin) / 2;
-        py_init = (box.ymax + box.ymin) / 2;
-      }
-      px = (box.xmax + box.xmin) / 2;
-      py = (box.ymax + box.ymin) / 2;
+  if (fowarder.intent_ == "DetectBag"){
 
-      if ((px - px_init) > 4 && (fowarder.intent_ == "DetectBag")){
-        if ((left_counter_ >= 3))
-        {
-          std::cerr << "Izquierda" << std::endl;
+    for (const auto & box : boxes->bounding_boxes) {
+      if (box.Class =="person") {
+        if (!found_person_){
+          found_person_ = true;
+          px_init = (box.xmax + box.xmin) / 2;
+          py_init = (box.ymax + box.ymin) / 2;
         }
-        if (!turning_done)
-        {
-          left_counter_++;
-          right_counter_ = 0;
-        }        
-      }
-      else if ((px - px_init < -4) && (fowarder.intent_ == "DetectBag")){
-        if (right_counter_ >= 3){
-          std::cerr << "Derecha" << std::endl;
+        px = (box.xmax + box.xmin) / 2;
+        py = (box.ymax + box.ymin) / 2;
+
+        if ((px - px_init) > 4 && (fowarder.intent_ == "DetectBag")){
+          if ((left_counter_ >= 3))
+          {
+            std::cerr << "Izquierda" << std::endl;
+          }
+          if (!turning_done)
+          {
+            left_counter_++;
+            right_counter_ = 0;
+          }        
         }
-        if(!turning_done)
-        {
-          right_counter_++;
-          left_counter_ = 0;
+        else if ((px - px_init < -4) && (fowarder.intent_ == "DetectBag")){
+          if (right_counter_ >= 3){
+            std::cerr << "Derecha" << std::endl;
+          }
+          if(!turning_done)
+          {
+            right_counter_++;
+            left_counter_ = 0;
+          }
         }
       }
     }
   }
+  
 }
 
 void
