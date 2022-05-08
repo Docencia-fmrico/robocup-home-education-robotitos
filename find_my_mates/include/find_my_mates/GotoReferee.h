@@ -35,6 +35,7 @@ class GotoReferee : public BTNavAction
     ros::NodeHandle n_;
     move_base_msgs::MoveBaseGoal pos_referee_;
     double dist_;
+    int count;
 };
 
 }  // namespace find_my_mates

@@ -15,7 +15,7 @@ GotoReferee::GotoReferee(
     const std::string& name, 
     const std::string & action_name,
     const BT::NodeConfiguration& config)
-: BTNavAction(name, action_name, config)
+: BTNavAction(name, action_name, config), count(0)
 {
     
 }
@@ -31,25 +31,23 @@ GotoReferee::on_halt() {
 }
 
 void
-GotoReferee::on_start() {
-  pos_referee_.target_pose.header.frame_id = "map";
-  pos_referee_.target_pose.header.stamp = ros::Time::now();
-  pos_referee_.target_pose.pose.position.x = 4.994;
-  pos_referee_.target_pose.pose.position.y = -1.018;
-  pos_referee_.target_pose.pose.position.y = 0.0;
-  pos_referee_.target_pose.pose.orientation.x = 0.0;
-  pos_referee_.target_pose.pose.orientation.y = 0.0;
-  pos_referee_.target_pose.pose.orientation.z = -0.527;
-  pos_referee_.target_pose.pose.orientation.w = 1.0;
-  set_goal(pos_referee_);
-}
+GotoReferee::on_start() {}
 
 BT::NodeStatus
 GotoReferee::on_tick()
 {
-    if (status() == BT::NodeStatus::IDLE)
-    {
-      ROS_INFO("Going to referee's position");
+    std::cout << "---------------------- I FOUND A PERSON ---------------------------" << std::endl;
+    if(count++ == 20) {
+      pos_referee_.target_pose.header.frame_id = "map";
+      pos_referee_.target_pose.header.stamp = ros::Time::now();
+      pos_referee_.target_pose.pose.position.x = 4.994;
+      pos_referee_.target_pose.pose.position.y = -1.018;
+      pos_referee_.target_pose.pose.position.y = 0.0;
+      pos_referee_.target_pose.pose.orientation.x = 0.0;
+      pos_referee_.target_pose.pose.orientation.y = 0.0;
+      pos_referee_.target_pose.pose.orientation.z = -0.527;
+      pos_referee_.target_pose.pose.orientation.w = 1.0;
+      set_goal(pos_referee_);
     }
     return BT::NodeStatus::RUNNING;
 }

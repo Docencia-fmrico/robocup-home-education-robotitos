@@ -4,14 +4,10 @@
     <BehaviorTree ID="BehaviorTree">
         <Repeat num_cycles="2">
             <Sequence>
-                <Sequence>
-                    <RetryUntilSuccessful num_attempts="6">
-                        <ReactiveSequence>
-                            <Action ID="GotoPerson"/>
-                            <Action ID="DetectPerson"/>
-                        </ReactiveSequence>
-                    </RetryUntilSuccessful>
-                </Sequence>
+                <ReactiveSequence>
+                    <Action ID="GotoPerson"/>
+                    <Action ID="DetectPerson"/>
+                </ReactiveSequence>
                 <Action ID="GotoReferee"/>
             </Sequence>
         </Repeat>

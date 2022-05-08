@@ -4,6 +4,7 @@
 #include "behaviortree_cpp_v3/bt_factory.h"
 #include <move_base_msgs/MoveBaseAction.h>
 #include "find_my_mates/BTNavAction.h"
+#include <darknet_ros_msgs/BoundingBoxes.h>
 
 #include "ros/ros.h"
 #include <string>
@@ -16,10 +17,10 @@ GotoPerson::GotoPerson(
   const std::string& name,
   const std::string & action_name,
   const BT::NodeConfiguration & config)
-: BTNavAction(name, action_name, config), goal_sent(false), count(0)
+: BTNavAction(name, action_name, config), goal_sent(false), count(0), counter_(0)
 { 
   direction_= n_.subscribe("/amcl_pose", 1, &GotoPerson::DirectionCallBack,this);
-  //goal_= n_.subscribe("/move_base/status", 1, &GotoPerson::statusCallBack,this);
+  sub_darknet_ = n_.subscribe("/darknet_ros/bounding_boxes", 1, &GotoPerson::GotoPersonCallBack,this);
 }
 
 void
@@ -27,6 +28,18 @@ GotoPerson::on_feedback(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback
 {
 	ROS_INFO("Current count %lf", feedback->base_position.pose.position.x);
 
+}
+
+void
+GotoPerson::GotoPersonCallBack(const darknet_ros_msgs::BoundingBoxesConstPtr& boxes){
+  ROS_INFO(" callback GotoPerson");
+  for (const auto & box : boxes->bounding_boxes) {
+    if (box.Class =="person") {
+      found_person_ = true;
+    } else {
+      found_person_ = false;
+    }
+  }
 }
 
 void GotoPerson::DirectionCallBack(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& position) {
@@ -52,15 +65,9 @@ BT::NodeStatus
 GotoPerson::on_tick()
 {
   move_base_msgs::MoveBaseGoal goal;
-  for (int i =0; i<6; i++) {
-    if (person[i][0] == directions.target_pose.pose.position.x) {
-      count = i++;
-      std::cout << count << std::endl;
-      goal_sent = false;
-    }
-  }
+  ROS_INFO(" callback goto");
 
-  if (!goal_sent) {
+  if ((counter_++ == 60) && (count < 6)){
     goal.target_pose.header.frame_id = "map";
     goal.target_pose.header.stamp = ros::Time::now();
     goal.target_pose.pose.position.x = person[count][0];
@@ -73,9 +80,14 @@ GotoPerson::on_tick()
     std::cout <<"x: " << person[count][0] << ", y: " << person[count][1] << ", z: " << person[count][2] << std::endl;
 
     set_goal(goal);
-    goal_sent = true;
+    counter_ = 0;
+    count++;
   } 
-  return BT::NodeStatus::RUNNING;
+  if (found_person_) {
+    return BT::NodeStatus::SUCCESS;
+  } else {
+    return BT::NodeStatus::RUNNING;
+  }
 }
 
 }  // namespace find_my_mates

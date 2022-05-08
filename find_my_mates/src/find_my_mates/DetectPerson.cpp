@@ -48,12 +48,10 @@ DetectPerson::tick()
   {
     ROS_INFO("Loking for a person");
   }
-  while(true)
-  {
-    std::cout << "a" << std::endl;
-  }
+
   if (found_person_) {
     found_person_ = false;
+    std::cout << "----------------------HI!! I SEE YOU---------------------------" << std::endl;
     return BT::NodeStatus::SUCCESS;
   } else {
     found_person_ = false;
