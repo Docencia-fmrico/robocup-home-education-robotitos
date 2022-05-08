@@ -63,7 +63,7 @@ GotoReferee::on_tick()
       ROS_INFO("Going to referee's position");
     }
     
-    if (counter_++ == 20)
+    if (counter_++ == 200)
     {
         pos_referee_.target_pose.header.frame_id = "map";
         pos_referee_.target_pose.header.stamp = ros::Time::now();
