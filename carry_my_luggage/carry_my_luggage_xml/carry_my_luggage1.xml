@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <SequenceStar>
+            <Action ID="GotoReferee"/>
+            <Action ID="DetectBag"/>
+            <ReactiveFallback>
+                <Timeout msec="500">
+                    <Action ID="ListenStop"/>
+                </Timeout>
+                <ReactiveSequence>
+                    <Action ID="DetectPerson"/>
+                    <Action ID="GotoPerson"/>
+                </ReactiveSequence>
+            </ReactiveFallback>
+            <Action ID="GotoArena"/>
+        </SequenceStar>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="DetectBag"/>
+        <Action ID="DetectObject"/>
+        <Action ID="DetectPerson"/>
+        <Action ID="GotoArena"/>
+        <Action ID="GotoDoor"/>
+        <Action ID="GotoPerson"/>
+        <Action ID="GotoReferee"/>
+        <Action ID="ListenStop"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>
+
