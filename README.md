@@ -28,6 +28,7 @@ Para implementar el diálogo, utilizamos DialogFlow, el cual nos permitia manten
 ![Dialogo ejemplo](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/blob/main/Captura%20de%20pantalla%20de%202022-05-10%2013-48-49.png)
 
 Y sus respuestas:
+
 ![Respuestas_ejemplo](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/blob/main/Captura%20de%20pantalla%20de%202022-05-10%2013-48-52.png)
 
 
