@@ -14,3 +14,8 @@
 ## 1. [CARRY MY LUGGAGE](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/tree/main/carry_my_luggage)
 
 La prueba consistiría en entrar en una arena con obstáculos dinámicos, esquivarlos y llegar a un árbitro. Este indicará al robot que equipaje debe llevar y el robot debe dar indicios de que lo ha captado, mediante giro, diálogo. Una vez hecho esto, el robot seguirá al árbitro fuera de la arena y del área mapeada, hasta que el árbitro decida. Una vez que le indique que puede volver, el robot deberá dirigirse de nuevo a la arena.
+
+
+## 2. [FIND MY MATES](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/tree/main/find_my_mates)
+
+La prueba consiste en entrar en la arena e identificar a una serie de personas y obtener información de ellas. El robot deberá obtener su nombre, el color de la camiseta y el objeto que porta. Una vez hecho esto, deberá dirigirse al árbitro y reportar toda la informacion.
