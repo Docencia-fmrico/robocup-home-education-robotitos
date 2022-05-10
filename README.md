@@ -19,3 +19,16 @@ La prueba consistiría en entrar en una arena con obstáculos dinámicos, esquiv
 ## 2. [FIND MY MATES](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/tree/main/find_my_mates)
 
 La prueba consiste en entrar en la arena e identificar a una serie de personas y obtener información de ellas. El robot deberá obtener su nombre, el color de la camiseta y el objeto que porta. Una vez hecho esto, deberá dirigirse al árbitro y reportar toda la informacion.
+
+
+## Diálogo.
+
+Para implementar el diálogo, utilizamos DialogFlow, el cual nos permitia mantener una conversación con el robot. Exponemos un ejemplo del tipo de diálogo que queríamos implementar para elegir la bolsa.
+
+![Dialogo ejemplo](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/blob/main/Captura%20de%20pantalla%20de%202022-05-10%2013-48-49.png)
+
+Y sus respuestas:
+![Respuestas_ejemplo](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/blob/main/Captura%20de%20pantalla%20de%202022-05-10%2013-48-52.png)
+
+
+El resto de información se encontrará en la [presentación haciendo click aquí](https://github.com/Docencia-fmrico/robocup-home-education-robotitos/blob/main/ASoftware_presentacion.pdf).
